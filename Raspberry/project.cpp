@@ -3,7 +3,7 @@
 #include<errno.h>
 #include<string.h>
 #include<stdlib.h>
-
+#include<signal.h>
 #include<wiringPi.h>
 #include<wiringSerial.h>
 
@@ -39,6 +39,8 @@ public:
 
 Project::Project()
 {
+	system("sudo motion");		// Motion Enable
+	cout << "CCTV Enable" << endl;
 	hum = temp = 0;
 	for (int i = 0; i < 5; i++)
 	{
@@ -51,7 +53,11 @@ Project::Project()
 		exit(1);
 	} // 시리얼 통신 초기화
 }
-
+Project::~Project()
+{
+	system("killall -9 motion");
+	cout << "CCTV disabled" << endl;
+}
 void Project::DHTProcess()
 {
 	DHTSend();
@@ -98,7 +104,7 @@ bool Project::DHTGetDate()
 		if (count > 30)
 		{
 			dhtData[j / 8] |= 1;
-		} 
+		}
 	}
 	if ((j >= 40) && (dhtData[4] == dhtData[0] + dhtData[1] + dhtData[2] + dhtData[3]))
 	{
@@ -110,7 +116,7 @@ bool Project::DHTGetDate()
 	else
 	{
 		return false;
-	} 
+	}
 }
 void Project::PMSRecive()
 {
@@ -146,8 +152,16 @@ void Project::ProjectProcess()
 	PrintData();
 }
 
+void signal_handler(int signo)
+{
+	cout << "Program stop" << endl;
+	system("sudo killall -9 motion");
+	exit(0);
+}
 int main()
 {
+	signal(SIGINT, signal_handler);
+
 	if (wiringPiSetup() == -1)
 	{
 		cout << "wiringPiSetup가 설치되지 않았습니다." << endl;
