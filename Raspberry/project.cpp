@@ -24,6 +24,7 @@ private:
 public:
 	Project();
 	// Constructor
+	~Project();
 	void DHTProcess();
 	void DHTSend();
 	void DHTResponse();
