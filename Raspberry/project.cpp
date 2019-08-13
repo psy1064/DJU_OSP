@@ -11,6 +11,8 @@
 
 using namespace std;
 
+unsigned char exit_flag = 0;
+
 class Project {
 private:
 	uint8_t dhtData[5];		// DHT11 센서값 배열
@@ -66,19 +68,19 @@ void Project::DHTProcess()
 } // DHT11 센서 측정 함수
 void Project::DHTSend()
 {
-	pinMode(DHT11, OUTPUT);		
-	digitalWrite(DHT11, LOW);	
-	delay(20);					
-	digitalWrite(DHT11, HIGH);	
-	delayMicroseconds(30);		
-} 
+	pinMode(DHT11, OUTPUT);
+	digitalWrite(DHT11, LOW);
+	delay(20);
+	digitalWrite(DHT11, HIGH);
+	delayMicroseconds(30);
+}
 void Project::DHTResponse()
 {
 	pinMode(DHT11, INPUT);
 
-	while (digitalRead(DHT11) != LOW); 
+	while (digitalRead(DHT11) != LOW);
 	while (digitalRead(DHT11) != HIGH);
-	while (digitalRead(DHT11) != LOW); 
+	while (digitalRead(DHT11) != LOW);
 }
 bool Project::DHTGetDate()
 {
@@ -151,16 +153,24 @@ void Project::ProjectProcess()
 	PMSRecive();
 	PrintData();
 }
-
 void signal_handler(int signo)
 {
-	cout << "Program stop" << endl;
+	cout << "call signal handler" << endl;
 	system("sudo killall -9 motion");
+	exit_flag = 1;
 	exit(0);
+}
+void call_exitfunc()
+{
+	cout << "call_ateixt func" << endl;
+	if(exit_flag == 0)
+		system("sudo killall -9 motion");
+	cout << "CCTV disabled" << endl;
 }
 int main()
 {
 	signal(SIGINT, signal_handler);
+	atexit(call_exitfunc);
 
 	if (wiringPiSetup() == -1)
 	{
