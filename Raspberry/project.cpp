@@ -7,7 +7,9 @@
 #include<wiringPi.h>
 #include<wiringSerial.h>
 
-#define DHT11 1				// DHT11 wPi Pin 1
+#define DHT11 0				// DHT11 wPi Pin 0
+#define HUMAN 1				// Human detect sensor wPi Pin 1
+#define LED 2				// LED wPi pin 2
 
 using namespace std;
 
@@ -54,11 +56,15 @@ Project::Project()
 		fprintf(stderr, "Unable serial", strerror(errno));
 		exit(1);
 	} // 시리얼 통신 초기화
+
+	pinMode(LED, OUTPUT);
+	digitalWrite(LED, HIGH);
 }
 Project::~Project()
 {
 	system("killall -9 motion");
 	cout << "CCTV disabled" << endl;
+	digitalWrite(LED, LOW);
 }
 void Project::DHTProcess()
 {
@@ -158,13 +164,18 @@ void signal_handler(int signo)
 	cout << "call signal handler" << endl;
 	system("sudo killall -9 motion");
 	exit_flag = 1;
+	digitalWrite(LED, LOW);
 	exit(0);
 }
 void call_exitfunc()
 {
 	cout << "call_ateixt func" << endl;
-	if(exit_flag == 0)
+	if (exit_flag == 0)
+	{
 		system("sudo killall -9 motion");
+		digitalWrite(LED, LOW);
+	}
+
 	cout << "CCTV disabled" << endl;
 }
 int main()
