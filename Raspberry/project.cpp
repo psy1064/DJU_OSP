@@ -162,7 +162,7 @@ void Project::ProjectProcess()
 void signal_handler(int signo)
 {
 	cout << "call signal handler" << endl;
-	system("sudo killall -9 motion");
+	system("sudo killall -15 motion");
 	exit_flag = 1;
 	digitalWrite(LED, LOW);
 	exit(0);
@@ -172,7 +172,7 @@ void call_exitfunc()
 	cout << "call_ateixt func" << endl;
 	if (exit_flag == 0)
 	{
-		system("sudo killall -9 motion");
+		system("sudo killall -15 motion");
 		digitalWrite(LED, LOW);
 	}
 
@@ -181,6 +181,8 @@ void call_exitfunc()
 int main()
 {
 	signal(SIGINT, signal_handler);
+	signal(SIGTERM, signal_handler);
+
 	atexit(call_exitfunc);
 
 	if (wiringPiSetup() == -1)
