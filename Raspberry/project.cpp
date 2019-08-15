@@ -7,9 +7,9 @@
 #include<wiringPi.h>
 #include<wiringSerial.h>
 
-#define DHT11 0				// DHT11 wPi Pin 0
-#define HUMAN 1				// Human detect sensor wPi Pin 1
-#define LED 2				// LED wPi pin 2
+#define DHT11 0			// DHT11 wPi Pin 0, BGM 17
+#define HUMAN 1			// Human detect sensor wPi Pin 1, BGM 18
+#define LED 2			// LED wPi pin 2, BGM 27
 
 using namespace std;
 
@@ -50,7 +50,6 @@ Project::Project()
 	{
 		dhtData[i] = 0;
 	}
-
 	if ((fd = serialOpen("/dev/ttyUSB0", 9600)) < 0)
 	{
 		fprintf(stderr, "Unable serial", strerror(errno));
@@ -159,6 +158,11 @@ void Project::ProjectProcess()
 	PMSRecive();
 	PrintData();
 }
+void humanInterrupt()
+{
+	cout << "Human detect" << endl;
+}
+
 void signal_handler(int signo)
 {
 	cout << "call signal handler" << endl;
@@ -166,7 +170,8 @@ void signal_handler(int signo)
 	exit_flag = 1;
 	digitalWrite(LED, LOW);
 	exit(0);
-}
+} 
+
 void call_exitfunc()
 {
 	cout << "call_ateixt func" << endl;
@@ -177,7 +182,8 @@ void call_exitfunc()
 	}
 
 	cout << "CCTV disabled" << endl;
-}
+} // 시스템 종료 시 호출되는 함수
+
 int main()
 {
 	signal(SIGINT, signal_handler);
@@ -190,12 +196,19 @@ int main()
 		cout << "wiringPiSetup가 설치되지 않았습니다." << endl;
 		exit(1);
 	}
+	else cout << "wiringPi Installed" << endl;
+
+	if (wiringPiISR(HUMAN, INT_EDGE_BOTH, &humanInterrupt) < 0)
+	{
+		return 1;
+	}
+	else cout << "Interrupt enable" << endl;
 
 	Project project;
 
 	while (1)
 	{
 		project.ProjectProcess();
-		delay(3000);
+		delay(1500);
 	}
 }
