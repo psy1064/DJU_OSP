@@ -7,10 +7,9 @@
     android:orientation="vertical"
     tools:context=".CCTV">
 
-
-    <ImageView
-        android:id="@+id/cctvsrc"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:srcCompat="@android:color/black" />
+    <WebView
+        android:id="@+id/cctvweb"
+        android:layout_marginTop="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 </LinearLayout>

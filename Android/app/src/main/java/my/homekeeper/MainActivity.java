@@ -1,5 +1,7 @@
 package my.homekeeper;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -7,6 +9,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -15,6 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Home homeFragment = new Home();
     private CCTV cctvFragment = new CCTV();
+
+    ImageView imageView;
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +55,5 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         }); // Navigation Bar 리스너
-
-
     }
 }
