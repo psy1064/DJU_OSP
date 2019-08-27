@@ -5,10 +5,62 @@
     android:layout_height="match_parent"
     tools:context=".Home">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="hi" />
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="105dp"
+            android:layout_marginTop="61dp"
+            android:layout_marginEnd="106dp"
+            android:layout_marginRight="106dp"
+            android:background="@drawable/oval"
+            android:gravity="center"
+            android:text="hi"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="173dp"
+            android:layout_marginTop="161dp"
+            android:layout_marginEnd="38dp"
+            android:layout_marginRight="38dp"
+            android:background="@drawable/oval"
+            android:gravity="center"
+            android:text="hi"
+            android:textSize="40sp" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="162dp"
+            android:layout_marginEnd="171dp"
+            android:layout_marginRight="171dp"
+            android:background="@drawable/oval"
+            android:gravity="center"
+            android:text="hi"
+            android:textSize="40sp" />
+
+    </RelativeLayout>
+
 
 </FrameLayout>
