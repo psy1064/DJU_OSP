@@ -18,8 +18,8 @@ unsigned char exit_flag = 0;
 
 class Project {
 private:
-	uint8_t dhtData[5];		// DHT11 센서값 배열
-	int hum, temp;			// 습도, 온도
+	uint8_t dhtData[5];			// DHT11 센서값 배열
+	int hum, temp;				// 습도, 온도
 
 	int fd;						// 시리얼통신 정보
 	uint8_t pms[32];			// PMS7003 센서값 배열
@@ -199,16 +199,16 @@ int main()
 
 	if (wiringPiSetup() == -1)
 	{
-		cout << "wiringPiSetup가 설치되지 않았습니다." << endl;
+		cout << "wiringPiSetup 설치 안되있음" << endl;
 		exit(1);
 	}
-	else cout << "wiringPi Installed" << endl;
+	else cout << "wiringPi 설치 되어있음 << endl;
 
 	if (wiringPiISR(HUMAN, INT_EDGE_BOTH, &humanInterrupt) < 0)
 	{
 		return 1;
 	}
-	else cout << "Interrupt enable" << endl;
+	else cout << "Interrupt 사용 가능함" << endl;
 
 	Project project;
 
