@@ -7,9 +7,10 @@
 #include<wiringPi.h>
 #include<wiringSerial.h>
 
-#define DHT11 0				// DHT11 wPi Pin 0
-#define HUMAN 1				// Human detect sensor wPi Pin 1
-#define LED 2				// LED wPi pin 2
+#define DHT11 0			// DHT11 wPi Pin 0, BGM 17
+#define HUMAN 1			// Human detect sensor wPi Pin 1, BGM 18
+#define LED_G 2			// LED wPi pin 2, BGM 2 7
+#define LED_R 3
 
 using namespace std;
 
@@ -50,21 +51,22 @@ Project::Project()
 	{
 		dhtData[i] = 0;
 	}
-
 	if ((fd = serialOpen("/dev/ttyUSB0", 9600)) < 0)
 	{
 		fprintf(stderr, "Unable serial", strerror(errno));
 		exit(1);
 	} // 시리얼 통신 초기화
 
-	pinMode(LED, OUTPUT);
-	digitalWrite(LED, HIGH);
+	pinMode(LED_G, OUTPUT);
+	pinMode(LED_R, OUTPUT);
+	digitalWrite(LED_R, LOW);
+	digitalWrite(LED_G, HIGH);
 }
 Project::~Project()
 {
-	system("killall -9 motion");
+	system("killall -15 motion");
 	cout << "CCTV disabled" << endl;
-	digitalWrite(LED, LOW);
+	digitalWrite(LED_G, LOW);
 }
 void Project::DHTProcess()
 {
@@ -159,25 +161,35 @@ void Project::ProjectProcess()
 	PMSRecive();
 	PrintData();
 }
+void humanInterrupt()
+{
+	cout << "Human detect" << endl;
+}
+
 void signal_handler(int signo)
 {
 	cout << "call signal handler" << endl;
 	system("sudo killall -15 motion");
 	exit_flag = 1;
-	digitalWrite(LED, LOW);
+	digitalWrite(LED_G, LOW);
+	digitalWrite(LED_R, HIGH);
+
 	exit(0);
 }
+
 void call_exitfunc()
 {
 	cout << "call_ateixt func" << endl;
 	if (exit_flag == 0)
 	{
 		system("sudo killall -15 motion");
-		digitalWrite(LED, LOW);
+		digitalWrite(LED_G, LOW);
+		digitalWrite(LED_R, HIGH);
 	}
 
 	cout << "CCTV disabled" << endl;
-}
+} // 시스템 종료 시 호출되는 함수
+
 int main()
 {
 	signal(SIGINT, signal_handler);
@@ -190,12 +202,19 @@ int main()
 		cout << "wiringPiSetup가 설치되지 않았습니다." << endl;
 		exit(1);
 	}
+	else cout << "wiringPi Installed" << endl;
+
+	if (wiringPiISR(HUMAN, INT_EDGE_BOTH, &humanInterrupt) < 0)
+	{
+		return 1;
+	}
+	else cout << "Interrupt enable" << endl;
 
 	Project project;
 
 	while (1)
 	{
 		project.ProjectProcess();
-		delay(3000);
+		delay(1500);
 	}
 }
