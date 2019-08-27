@@ -9,7 +9,8 @@
 
 #define DHT11 0			// DHT11 wPi Pin 0, BGM 17
 #define HUMAN 1			// Human detect sensor wPi Pin 1, BGM 18
-#define LED 2			// LED wPi pin 2, BGM 27
+#define LED_G 2			// LED wPi pin 2, BGM 2 7
+#define LED_R 3
 
 using namespace std;
 
@@ -56,14 +57,16 @@ Project::Project()
 		exit(1);
 	} // 시리얼 통신 초기화
 
-	pinMode(LED, OUTPUT);
-	digitalWrite(LED, HIGH);
+	pinMode(LED_G, OUTPUT);
+	pinMode(LED_R, OUTPUT);
+	digitalWrite(LED_R, LOW);
+	digitalWrite(LED_G, HIGH);
 }
 Project::~Project()
 {
-	system("killall -9 motion");
+	system("killall -15 motion");
 	cout << "CCTV disabled" << endl;
-	digitalWrite(LED, LOW);
+	digitalWrite(LED_G, LOW);
 }
 void Project::DHTProcess()
 {
@@ -168,9 +171,11 @@ void signal_handler(int signo)
 	cout << "call signal handler" << endl;
 	system("sudo killall -15 motion");
 	exit_flag = 1;
-	digitalWrite(LED, LOW);
+	digitalWrite(LED_G, LOW);
+	digitalWrite(LED_R, HIGH);
+
 	exit(0);
-} 
+}
 
 void call_exitfunc()
 {
@@ -178,7 +183,8 @@ void call_exitfunc()
 	if (exit_flag == 0)
 	{
 		system("sudo killall -15 motion");
-		digitalWrite(LED, LOW);
+		digitalWrite(LED_G, LOW);
+		digitalWrite(LED_R, HIGH);
 	}
 
 	cout << "CCTV disabled" << endl;
