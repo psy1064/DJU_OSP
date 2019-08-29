@@ -10,7 +10,7 @@
     <WebView
         android:id="@+id/cctvWeb"
         android:layout_width="match_parent"
-        android:layout_height="549dp" />
+        android:layout_height="515dp" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"

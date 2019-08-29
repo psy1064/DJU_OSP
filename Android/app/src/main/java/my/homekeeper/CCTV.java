@@ -3,10 +3,12 @@ package my.homekeeper;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Toast;
 
 public class CCTV extends Fragment {
     WebView webView;
@@ -24,7 +26,20 @@ public class CCTV extends Fragment {
                         "<body><div><img src='http://121.153.150.18:8080/'/></div></body></html>",
                 "text/html", "UTF-8");
 
-
+        webView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN : {
+                        Toast.makeText(getContext(), "Touch", Toast.LENGTH_LONG).show();
+                        webView.reload();
+                        break;
+                    }
+                }
+                return true;
+            }
+        });
         return view;
     }
+
 }
