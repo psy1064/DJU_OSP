@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
@@ -25,14 +26,13 @@ public class MainActivity extends AppCompatActivity {
     private Home homeFragment = new Home();
     private CCTV cctvFragment = new CCTV();
 
-    ImageView imageView;
-    Bitmap bitmap;
-
+    final String TAG = "TAG+MainActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Log.d(TAG,"Create MainActivity");
         bottomNavigationView = findViewById(R.id.nav_view);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();           // 첫 화면 지정

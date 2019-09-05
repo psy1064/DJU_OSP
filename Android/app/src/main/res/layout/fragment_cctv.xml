@@ -70,7 +70,7 @@
         android:layout_weight="1"
         android:background="@android:color/white">
         <TextView
-            android:id="@+id/callButton"
+            android:id="@+id/callText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="신고하기"
