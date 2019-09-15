@@ -12,9 +12,12 @@
 #define LED_G 2			// LED wPi pin 2, BGM 2 7
 #define LED_R 3
 
+#define DELAY 5000		// Delay 5초
+
 using namespace std;
 
 unsigned char exit_flag = 0;
+unsigned int humanCount = 0;
 
 class Project {
 private:
@@ -51,6 +54,12 @@ Project::Project()
 	{
 		dhtData[i] = 0;
 	}
+	if (wiringPiSetup() == -1)
+	{
+		cout << "wiringPiSetup Error" << endl;
+		exit(1);
+	}
+	else cout << "wiringPiSetup" << endl;
 	if ((fd = serialOpen("/dev/ttyUSB0", 9600)) < 0)
 	{
 		fprintf(stderr, "Unable serial", strerror(errno));
@@ -59,6 +68,7 @@ Project::Project()
 
 	pinMode(LED_G, OUTPUT);
 	pinMode(LED_R, OUTPUT);
+	pinMode(HUMAN, INPUT);
 	digitalWrite(LED_R, LOW);
 	digitalWrite(LED_G, HIGH);
 }
@@ -163,7 +173,9 @@ void Project::ProjectProcess()
 }
 void humanInterrupt()
 {
+	humanCount++;
 	cout << "Human detect" << endl;
+	cout << "Human count = " << humanCount << endl;
 }
 
 void signal_handler(int signo)
@@ -186,7 +198,6 @@ void call_exitfunc()
 		digitalWrite(LED_G, LOW);
 		digitalWrite(LED_R, HIGH);
 	}
-
 	cout << "CCTV disabled" << endl;
 } // 시스템 종료 시 호출되는 함수
 
@@ -197,24 +208,18 @@ int main()
 
 	atexit(call_exitfunc);
 
-	if (wiringPiSetup() == -1)
-	{
-		cout << "wiringPiSetup 설치 안되있음" << endl;
-		exit(1);
-	}
-	else cout << "wiringPi 설치 되어있음 << endl;
+	Project project;
 
-	if (wiringPiISR(HUMAN, INT_EDGE_BOTH, &humanInterrupt) < 0)
+	if (wiringPiISR(HUMAN, INT_EDGE_RISING, &humanInterrupt) < 0)
 	{
 		return 1;
 	}
-	else cout << "Interrupt 사용 가능함" << endl;
+	else cout << "Interrupt enabled" << endl;
 
-	Project project;
 
 	while (1)
 	{
 		project.ProjectProcess();
-		delay(1500);
+		delay(DELAY);
 	}
 }
