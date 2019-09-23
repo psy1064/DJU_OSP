@@ -17,40 +17,6 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@android:color/white">
-        <TextView
-            android:id="@+id/cctvText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="CCTV 방향 제어"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_weight="1"/>
-        <TextView
-            android:id="@+id/leftText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="좌"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/holo_blue_dark"/>
-        <TextView
-            android:id="@+id/rightText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="우"
-            android:textSize="20sp"
-            android:gravity="center"
-            android:layout_weight="1"
-            android:background="@android:color/holo_blue_dark"/>
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@android:color/white">
 
         <Switch
             android:id="@+id/switch1"
@@ -70,7 +36,7 @@
         android:layout_weight="1"
         android:background="@android:color/white">
         <TextView
-            android:id="@+id/callButton"
+            android:id="@+id/callText"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="신고하기"

@@ -4,11 +4,13 @@
     <item
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home_black_24dp"
+        android:enabled="true"
         android:title="@string/title_home" />
 
     <item
         android:id="@+id/navigation_cctv"
         android:icon="@drawable/ic_dashboard_black_24dp"
+        android:enabled="true"
         android:title="@string/title_cctv" />
 
 </menu>
