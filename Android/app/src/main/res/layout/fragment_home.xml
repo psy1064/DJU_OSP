@@ -10,24 +10,24 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/tempText"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="105dp"
-            android:layout_marginTop="61dp"
-            android:layout_marginEnd="106dp"
-            android:layout_marginRight="106dp"
+            android:layout_marginLeft="106dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="105dp"
+            android:layout_marginRight="105dp"
             android:background="@drawable/oval"
             android:gravity="center"
-            android:text="hi"
+            android:text="30℃"
             android:textSize="40sp" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/humText"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_alignParentLeft="true"
@@ -35,31 +35,44 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_marginLeft="173dp"
-            android:layout_marginTop="161dp"
+            android:layout_marginTop="167dp"
             android:layout_marginEnd="38dp"
             android:layout_marginRight="38dp"
             android:background="@drawable/oval"
             android:gravity="center"
-            android:text="hi"
+            android:text="5"
             android:textSize="40sp" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/dustText"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="40dp"
-            android:layout_marginTop="162dp"
-            android:layout_marginEnd="171dp"
-            android:layout_marginRight="171dp"
+            android:layout_marginLeft="38dp"
+            android:layout_marginTop="167dp"
+            android:layout_marginEnd="173dp"
+            android:layout_marginRight="173dp"
             android:background="@drawable/oval"
             android:gravity="center"
-            android:text="hi"
+            android:text="70%"
             android:textSize="40sp" />
 
+        <TextView
+            android:layout_width="323dp"
+            android:layout_height="222dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="44dp"
+            android:layout_marginTop="402dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginRight="44dp"
+            android:background="@drawable/rect"
+            />
     </RelativeLayout>
 
 

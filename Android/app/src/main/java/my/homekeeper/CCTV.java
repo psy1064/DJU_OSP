@@ -22,6 +22,7 @@ public class CCTV extends Fragment {
     WebView webView;
     WebSettings webSettings;
     TextView callText;
+    BottomNavigationView bottomNavigationView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cctv, container, false);
@@ -29,6 +30,7 @@ public class CCTV extends Fragment {
 
         webView = (WebView) view.findViewById(R.id.cctvWeb);
         callText = (TextView) view.findViewById(R.id.callText);
+
         webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
