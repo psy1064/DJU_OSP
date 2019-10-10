@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Log.d(TAG,"Create MainActivity");
-        bottomNavigationView = findViewById(R.id.nav_view);
+
+        bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();           // 첫 화면 지정
@@ -47,5 +48,11 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         }); // Navigation Bar 리스너
+    }
+
+    @Override
+    protected void onRestart() {
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        super.onRestart();
     }
 }

@@ -15,27 +15,8 @@ public class Home extends Fragment {
     BottomNavigationView bottomNavigationView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
         Log.d(TAG, "Create Home Fragment onCreateView");
 
         return inflater.inflate(R.layout.fragment_home, container, false);
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Log.d(TAG, "Create Home Fragment onActivityCreated");
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onStart() {
-        Log.d(TAG, "Create Home Fragment onStart");
-        super.onStart();
-    }
-
-    @Override
-    public void onResume() {
-        Log.d(TAG, "Create Home Fragment onResume");
-        super.onResume();
     }
 }
