@@ -2,15 +2,19 @@
 #define PROCESS_H
 #include "dht.h"
 #include "pms.h"
+#include <QApplication>
+#include <QLabel>
 
 class PROCESS {
 private:
 	DHT dht;
 	PMS pms;
+    //QLabel* temp, hum, dust;
 public:
 	PROCESS();
 	void processCycle();
 	void printData();
+    void putData(int h, int t, int d);
 };
 
 void humanInterrupt();

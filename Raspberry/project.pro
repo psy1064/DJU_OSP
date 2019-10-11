@@ -24,12 +24,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += c++11
 
+
 SOURCES += \
         main.cpp \
-        mainwindow.cpp
+        mainwindow.cpp \
+        dht.cpp \
+        pms.cpp \
+        process.cpp \
+        widget.cpp \
 
 HEADERS += \
-        mainwindow.h
+        mainwindow.h \
+        dht.h \
+        process.h \
+        pms.h \
+        widget.h \
 
 FORMS += \
         mainwindow.ui
@@ -38,3 +47,19 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES +=
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/release/ -lwiringPi
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/local/lib/debug/ -lwiringPi
+else:unix: LIBS += -L$$PWD/../../../../../usr/local/lib/ -lwiringPi
+
+INCLUDEPATH += $$PWD/../../../../../usr/local/include
+DEPENDPATH += $$PWD/../../../../../usr/local/include
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/lib/arm-linux-gnueabihf/release/ -lpthread
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/lib/arm-linux-gnueabihf/debug/ -lpthread
+else:unix: LIBS += -L$$PWD/../../../../../usr/lib/arm-linux-gnueabihf/ -lpthread
+
+INCLUDEPATH += $$PWD/../../../../../usr/lib/arm-linux-gnueabihf
+DEPENDPATH += $$PWD/../../../../../usr/lib/arm-linux-gnueabihf

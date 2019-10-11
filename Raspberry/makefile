@@ -1,5 +1,6 @@
 Gpp = g++
 TARGET = homekeeper
+INGR = project.cpp dht.cpp pms.cpp process.cpp
 
-$(TARGET) : project.cpp
-	$(Gpp) -o $(TARGET) project.cpp -lwiringPi
+$(TARGET) : $(INGR)
+	$(Gpp) -o $(TARGET) $(INGR) -lwiringPi

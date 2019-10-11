@@ -1,11 +1,12 @@
 #include "mainwindow.h"
 #include "process.h"
+#include "widget.h"
 
 #include <QApplication>
 #include <wiringPi.h>
 #include <iostream>
-#include <signal.h>
 #include <pthread.h>
+#include <QString>
 
 #define DELAY 5000		// Delay 5ÃÊ
 #define HUMAN 1			// Human detect sensor wPi Pin 1, BGM 18
@@ -14,9 +15,16 @@ PROCESS process;
 
 void* loopFunction(void* num)
 {
+    int hum;
+    int temp;
+    int dust;
+    Widget widget;
     while (1)
     {
+        widget.show();
         process.processCycle();
+        process.putData(hum, temp, dust);
+        widget.setData(hum, temp, dust);
         delay(DELAY);
     }
 }
@@ -24,24 +32,11 @@ void* loopFunction(void* num)
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    /*Widget widget;
+    widget.show();*/
 
-    MainWindow w;
-    w.show();
     pthread_t loopThread;
-
-    signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
-
-    atexit(call_exitfunc);
-
-    if (wiringPiISR(HUMAN, INT_EDGE_RISING, &humanInterrupt) < 0)
-    {
-        exit(1);
-    }
-    else std::cout << "Interrupt enabled\n";
-
     pthread_create(&loopThread, NULL, loopFunction, NULL);
-    //pthread_join(loopThread,NULL);
 
     return a.exec();
 }
