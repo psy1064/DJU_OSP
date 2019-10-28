@@ -1,3 +1,4 @@
+
 #include "process.h"
 
 #include <cstdlib>
@@ -14,25 +15,25 @@ unsigned char exit_flag = 0;
 
 PROCESS::PROCESS()
 {
-    system("sudo motion");			// Motion Enable
+    system("sudo motion");			// Motion 실행
     cout << "CCTV Enable" << endl;
 
     pinMode(LED_G, OUTPUT);
-    pinMode(LED_R, OUTPUT);
-    pinMode(HUMAN, INPUT);
+    pinMode(LED_R, OUTPUT);			// LED 핀 초기화
+    pinMode(HUMAN, INPUT);			// 인체감지센서 초기화
 
     digitalWrite(LED_R, LOW);
     digitalWrite(LED_G, HIGH);
 
     signal(SIGINT, signal_handler);
-    signal(SIGTERM, signal_handler);
+    signal(SIGTERM, signal_handler);		// 강제 종료 시 처리되는 인터럽트 처리
 
-    atexit(call_exitfunc);
+    atexit(call_exitfunc);			// 시스템 종료 시 호출되는 함수 선언
 
     if (wiringPiISR(HUMAN, INT_EDGE_RISING, &humanInterrupt) < 0)
     {
         exit(1);
-    }
+    }						// 인체감지센서 인터럽트 선언 감지 시 humanInterrput 함수 실행
     else std::cout << "Interrupt enabled\n";
 }
 void PROCESS::processCycle()
@@ -40,7 +41,7 @@ void PROCESS::processCycle()
     dht.DHTProcess();
     pms.PMSReceive();
     printData();
-}
+} // 데이터 수집
 void PROCESS::printData()
 {
     cout << "============================" << endl;
