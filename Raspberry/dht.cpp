@@ -15,15 +15,15 @@ DHT::DHT()
     {
         std::cout << "wiringPiSetup Error\n";
         exit(1);
-    }
+    } // wiringPiSetup
     else std::cout << "wiringPiSetup\n";
-}
+} // DHT11 센서 데이터 수집 클래스 생성자
 void DHT::DHTProcess()
 {
     DHTSend();
     DHTResponse();
     bool tmp = DHTGetDate();
-} // DHT11 ¼¾¼­ ÃøÁ¤ ÇÔ¼ö
+} // DHT11 센서 데이터 수집 싸이클
 void DHT::DHTSend()
 {
     pinMode(DHT11, OUTPUT);
@@ -31,7 +31,7 @@ void DHT::DHTSend()
     delay(20);
     digitalWrite(DHT11, HIGH);
     delayMicroseconds(30);
-}
+} // DHT11에게 수신 준비를 알리는 함수
 void DHT::DHTResponse()
 {
     pinMode(DHT11, INPUT);
@@ -39,7 +39,7 @@ void DHT::DHTResponse()
     while (digitalRead(DHT11) != LOW);
     while (digitalRead(DHT11) != HIGH);
     while (digitalRead(DHT11) != LOW);
-}
+} // DHT11이 사용자에게 송신 준비를 알리는 함수
 bool DHT::DHTGetDate()
 {
     int count = 0;
@@ -51,15 +51,15 @@ bool DHT::DHTGetDate()
         {
             delayMicroseconds(1);
             count++;
-            if (count >= 255) return false; 	// start to transmit 1-bit data(50us)
-        } // When DHT is sending data to MCU, every bit of data begins with the 50us low-voltage-level
+            if (count >= 255) return false;
+        } // 일정 시간이 지나면 false 리턴
         count = 0;
         while (digitalRead(DHT11) == HIGH)
         {
             delayMicroseconds(1);
             count++;
             if (count >= 255) return false;
-        }
+        } // 일정 시간이 지나면 false 리턴
         dhtData[j / 8] <<= 1;
         if (count > 30)
         {
@@ -72,17 +72,17 @@ bool DHT::DHTGetDate()
         temp = (int)dhtData[2];
         std::cout << "DHT11 Right\n";
         return true;
-    }
+    } // 마지막 8개 비트와 나머지 32개의 비트의 합이 같아야 함
     else
     {
         return false;
     }
-}
+} // DHT11에서 데이터를 받아오는 함수
 int DHT::getTemp()
 {
     return temp;
-}
+} // 측정한 온도 데이터 반환
 int DHT::getHum()
 {
     return hum;
-}
+} // 측정한 습도 데이터 반환
