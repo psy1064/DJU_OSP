@@ -12,7 +12,7 @@ PMS::PMS()
     {
         fprintf(stderr, "Unable serial", strerror(errno));
         exit(1);
-    } // ½Ã¸®¾ó Åë½Å ÃÊ±âÈ­
+    } // Serial 통신을 위한 연결
 }
 void PMS::PMSReceive()
 {
@@ -33,8 +33,8 @@ void PMS::PMSReceive()
 
         checkcode = 0;
     }
-}
+} // PMS7003에서 데이터를 받아오는 함수
 int PMS::getPM()
 {
-    return pm1;
-}
+    return pm10; // 미세먼지 데이터 반환
+} // 미세먼지(PM10) 데이터 반환

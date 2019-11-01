@@ -5,14 +5,14 @@
 
 class PMS {
 private:
-    int fd;						// ï¿œÃžï¿œï¿œï¿œï¿œï¿œï¿œï¿œ ï¿œï¿œï¿œï¿œ
-    uint8_t pms[32];			// PMS7003 ï¿œï¿œï¿œï¿œï¿œï¿œ ï¿œè¿­
-    int pm1, pm25, pm10;	// ï¿œï¿œï¿œÊ¹ÌŒï¿œï¿œï¿œï¿œï¿œ, ï¿œÊ¹ÌŒï¿œï¿œï¿œï¿œï¿œ, ï¿œÌŒï¿œï¿œï¿œï¿œï¿œ ï¿œï¿œ
-    uint16_t checkcode;			// PMS7003 Checkcode ï¿œï¿œ
+    int fd;
+    uint8_t pms[32];		// PMS7003 데이터 수집 배열
+    int pm1, pm25, pm10;	// 미세먼지 단위
+    uint16_t checkcode;		// PMS7003 Checksum code
 public:
     PMS();
-    void PMSReceive();
-    int getPM();
+    void PMSReceive();		// PMS7003에서 데이터를 받아오는 함수
+    int getPM();		// 미세먼지(PM10) 데이터 반환
 };
 
 #endif // PMS_H
