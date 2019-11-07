@@ -1,7 +1,7 @@
 #include "dialog.h"
 #include "ui_dialog.h"
 #include "processthread.h"
-//#include <QImage>
+
 #include <QPixmap>
 
 Dialog::Dialog(QWidget *parent) :
