@@ -22,10 +22,11 @@ void DHT::DHTProcess()
 {
     DHTSend();
     DHTResponse();
-    bool tmp = DHTGetDate();
+    bool tmp = DHTGetData();
 } // DHT11 센서 데이터 수집 싸이클
 void DHT::DHTSend()
 {
+    std::cout << "DHTSend\n";
     pinMode(DHT11, OUTPUT);
     digitalWrite(DHT11, LOW);
     delay(20);
@@ -34,14 +35,17 @@ void DHT::DHTSend()
 } // DHT11에게 수신 준비를 알리는 함수
 void DHT::DHTResponse()
 {
+    std::cout << "DHTResponse\n";
+
     pinMode(DHT11, INPUT);
 
     while (digitalRead(DHT11) != LOW);
     while (digitalRead(DHT11) != HIGH);
     while (digitalRead(DHT11) != LOW);
 } // DHT11이 사용자에게 송신 준비를 알리는 함수
-bool DHT::DHTGetDate()
+bool DHT::DHTGetData()
 {
+    std::cout << "DHTGetData\n";
     int count = 0;
     int j;
     for (j = 0; j < 40; j++)
