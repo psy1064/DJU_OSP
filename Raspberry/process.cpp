@@ -1,4 +1,3 @@
-
 #include "process.h"
 
 #include <cstdlib>
@@ -15,6 +14,7 @@ unsigned char exit_flag = 0;
 
 PROCESS::PROCESS()
 {
+    count = 0;
     system("sudo motion");			// Motion 실행
     cout << "CCTV Enable" << endl;
 
@@ -29,7 +29,6 @@ PROCESS::PROCESS()
     signal(SIGTERM, signal_handler);		// 강제 종료 시 처리되는 인터럽트 처리
 
     atexit(call_exitfunc);			// 시스템 종료 시 호출되는 함수 선언
-
     if (wiringPiISR(HUMAN, INT_EDGE_RISING, &humanInterrupt) < 0)
     {
         exit(1);
@@ -38,6 +37,7 @@ PROCESS::PROCESS()
 }
 void PROCESS::processCycle()
 {
+    cout << "count = " << ++count << endl;
     dht.DHTProcess();
     pms.PMSReceive();
     printData();
@@ -45,15 +45,15 @@ void PROCESS::processCycle()
 void PROCESS::printData()
 {
     cout << "============================" << endl;
-    cout << "hum = " << dht.getHum() << " temp = " << dht.getTemp() << endl;
+    cout << " temp = " << dht.getTemp() << "hum = " << dht.getHum() << endl;
     cout << "PM1 = " << pms.getPM() << endl;
     cout << "============================" << endl;
 }
-void PROCESS::putData(int h, int t, int d)
+void PROCESS::putData(int* t, int* h, int* d)
 {
-    h = dht.getHum();
-    t = dht.getTemp();
-    d = pms.getPM();
+    *h = dht.getHum();
+    *t = dht.getTemp();
+    *d = pms.getPM();
 }
 void humanInterrupt()
 {
