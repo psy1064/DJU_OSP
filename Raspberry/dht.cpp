@@ -20,6 +20,7 @@ DHT::DHT()
 } // DHT11 센서 데이터 수집 클래스 생성자
 void DHT::DHTProcess()
 {
+    std::cout << "DHT11 Start\n";
     DHTSend();
     DHTResponse();
     bool tmp = DHTGetData();
@@ -36,10 +37,15 @@ void DHT::DHTSend()
 void DHT::DHTResponse()
 {
     std::cout << "DHTResponse\n";
-
+    int count = 0;
     pinMode(DHT11, INPUT);
 
-    while (digitalRead(DHT11) != LOW);
+    while (digitalRead(DHT11) != LOW)
+    {
+        delayMicroseconds(1);
+        count++;
+        if (count >= 255) DHTGetData();
+    }
     while (digitalRead(DHT11) != HIGH);
     while (digitalRead(DHT11) != LOW);
 } // DHT11이 사용자에게 송신 준비를 알리는 함수
