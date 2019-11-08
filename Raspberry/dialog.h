@@ -19,6 +19,10 @@ public:
 private slots:
     void showValue(int temp,int hum, int dust);
 
+    void on_onButton_clicked();
+
+    void on_offButton_clicked();
+
 private:
     Ui::Dialog *ui;
     processThread* pthread;

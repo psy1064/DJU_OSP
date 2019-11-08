@@ -3,6 +3,10 @@
 #include "processthread.h"
 
 #include <QPixmap>
+#include <wiringPi.h>
+#include <softPwm.h>
+
+#define SERVO 2
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),
@@ -15,14 +19,17 @@ Dialog::Dialog(QWidget *parent) :
     blue.setColor(QPalette::Active, QPalette::WindowText, Qt::blue);
     green.setColor(QPalette::Active, QPalette::WindowText, Qt::green);      	// Palette에 색 설정
 
+    lightIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/lightbulb.png");
     tempIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/temperature.png");
     humIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/hum.png");
     dustIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/dust.png");		// Icon에 넣을 사진 경로 지정
 
+    ui->lightIcon->setPixmap(lightIconPicture.scaled(128,128,Qt::KeepAspectRatio));
     ui->tempIcon->setPixmap(tempIconPicture.scaled(128,128,Qt::KeepAspectRatio));
     ui->humIcon->setPixmap(humIconPicture.scaled(128,128,Qt::KeepAspectRatio));
     ui->dustIcon->setPixmap(dustIconPicture.scaled(128,128,Qt::KeepAspectRatio));	// Icon에 사진 넣기
 
+    ui->lightIcon->setAlignment(Qt::AlignCenter);
     ui->tempIcon->setAlignment(Qt::AlignCenter);
     ui->humIcon->setAlignment(Qt::AlignCenter);
     ui->dustIcon->setAlignment(Qt::AlignCenter);				// 사진 가운데 정렬
@@ -30,6 +37,12 @@ Dialog::Dialog(QWidget *parent) :
     ui->tempValue->setFont(QFont("FibotoLt",20));
     ui->humValue->setFont(QFont("FibotoLt",20));
     ui->dustValue->setFont(QFont("FibotoLt",20));	// 각 센세 데이터 출력 값 폰트, 글자 크기 설정
+
+    if(wiringPiSetup()==-1) exit(1);
+
+    softPwmCreate(SERVO, 0, 100);
+    softPwmWrite(SERVO, 15);
+    pinMode(SERVO, INPUT);
 
     pthread = new processThread(this);			// 센서 데이터 수집 쓰레드 동적 할당
     connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
@@ -48,9 +61,30 @@ void Dialog::showValue(int temp, int hum, int dust)
     else if(dust > 80 && dust <= 150)   ui->dustValue->setPalette(yellow);
     else if(dust > 150)                 ui->dustValue->setPalette(red);
     // 미세먼지 범위에 따라 색 변경
-
 }
 Dialog::~Dialog()
 {
     delete ui;
+}
+
+void Dialog::on_onButton_clicked()
+{
+    pinMode(SERVO, OUTPUT);
+    softPwmCreate(SERVO, 0, 100);
+    softPwmWrite(SERVO, 12);
+    delay(100);
+    softPwmWrite(SERVO, 15);
+    delay(100);
+    pinMode(SERVO, INPUT);
+}
+
+void Dialog::on_offButton_clicked()
+{
+    pinMode(SERVO, OUTPUT);
+    softPwmCreate(SERVO, 0, 100);
+    softPwmWrite(SERVO, 18);
+    delay(100);
+    softPwmWrite(SERVO, 15);
+    delay(100);
+    pinMode(SERVO, INPUT);
 }
