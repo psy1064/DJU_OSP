@@ -2,6 +2,7 @@
 #define DIALOG_H
 
 #include <QDialog>
+#include <QTimer>
 #include <QPixmap>
 #include "processthread.h"
 
@@ -23,10 +24,13 @@ private slots:
 
     void on_offButton_clicked();
 
+    void showTime();
+
 private:
     Ui::Dialog *ui;
+    QTimer* timer;
     processThread* pthread;
-    QPalette red, yellow, green, blue;      // 글자 색
+    QPalette red, orange, green, blue;      // 글자 색
     QPixmap tempIconPicture, humIconPicture, dustIconPicture, lightIconPicture;
 };
 
