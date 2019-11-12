@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -27,21 +28,21 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
-        mainwindow.cpp \
         dht.cpp \
         pms.cpp \
         process.cpp \
-        widget.cpp \
+    dialog.cpp \
+    processthread.cpp
 
 HEADERS += \
-        mainwindow.h \
         dht.h \
         process.h \
         pms.h \
-        widget.h \
+    dialog.h \
+    processthread.h
 
 FORMS += \
-        mainwindow.ui
+    dialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -56,10 +57,6 @@ else:unix: LIBS += -L$$PWD/../../../../../usr/local/lib/ -lwiringPi
 
 INCLUDEPATH += $$PWD/../../../../../usr/local/include
 DEPENDPATH += $$PWD/../../../../../usr/local/include
-
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../../../../../usr/lib/arm-linux-gnueabihf/release/ -lpthread
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../../../../../usr/lib/arm-linux-gnueabihf/debug/ -lpthread
-else:unix: LIBS += -L$$PWD/../../../../../usr/lib/arm-linux-gnueabihf/ -lpthread
 
 INCLUDEPATH += $$PWD/../../../../../usr/lib/arm-linux-gnueabihf
 DEPENDPATH += $$PWD/../../../../../usr/lib/arm-linux-gnueabihf
