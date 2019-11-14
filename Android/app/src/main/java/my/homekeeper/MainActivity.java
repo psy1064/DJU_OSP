@@ -1,5 +1,6 @@
 package my.homekeeper;
 
+import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,8 +12,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInput;
@@ -31,10 +36,18 @@ public class MainActivity extends AppCompatActivity {
 
     final String TAG = "TAG+MainActivity";
 
+    public DataInputStream dataInputStream;
+    public DataOutputStream dataOutputStream;
+    private Socket socket;
+    private String readData;
+
+    public static Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        context = this;
 
         Log.d(TAG,"Create MainActivity");
 
@@ -74,6 +87,22 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onRestart");
     } // 어플 다시 로딩 시 처음 fragment로 전환
 
+    public void turnOn() throws IOException {
+        Toast.makeText(getApplicationContext(), "lampOn", Toast.LENGTH_LONG).show();
+        try {
+            dataOutputStream.writeUTF("On");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void turnOff() throws IOException {
+        Toast.makeText(getApplicationContext(), "lampOff", Toast.LENGTH_LONG).show();
+        try {
+            dataOutputStream.writeUTF("Off");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     class ConnectThread extends Thread {
         String hostname;
         int port;
@@ -83,16 +112,17 @@ public class MainActivity extends AppCompatActivity {
         }
         public void run() {
             try{
-                Socket socket = new Socket(hostname, port);
+                socket = new Socket(hostname, port);
+                dataInputStream = new DataInputStream(socket.getInputStream());
+                dataOutputStream = new DataOutputStream(socket.getOutputStream());
                 while(true) {
-                    Log.d(TAG, "THRE");
-                /*ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
-                outputStream.writeObject("Hello AndroidTown");
-                outputStream.flush();
-*/
-                    ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
-                    String obj = (String) objectInputStream.readObject();
-                    Log.d(TAG, "Read : " + obj);
+                    Log.d(TAG, "Listening");
+                    try{
+                        readData = dataInputStream.readUTF();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
                 }
                 // socket.close();
             } catch (Exception e) {
