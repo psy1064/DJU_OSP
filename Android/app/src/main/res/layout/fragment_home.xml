@@ -24,7 +24,7 @@
             android:background="@drawable/oval"
             android:gravity="center"
             android:text="5"
-            android:textSize="40sp" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/humText"
@@ -41,7 +41,7 @@
             android:background="@drawable/oval"
             android:gravity="center"
             android:text="70%"
-            android:textSize="40sp" />
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/tempText"
@@ -58,7 +58,7 @@
             android:background="@drawable/oval"
             android:gravity="center"
             android:text="30℃"
-            android:textSize="40sp" />
+            android:textSize="25sp" />
 
         <Button
             android:id="@+id/lampButton"

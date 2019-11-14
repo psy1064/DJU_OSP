@@ -12,20 +12,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
 public class Home extends Fragment {
     final String TAG = "TAG+HomeFragment";
     Button lampButton;
-
+    TextView tempText, humText, dustText;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Log.d(TAG, "Create Home Fragment onCreateView");
 
         lampButton = (Button) view.findViewById(R.id.lampButton);
+        tempText = (TextView) view.findViewById(R.id.tempText);
+        humText = (TextView) view.findViewById(R.id.humText);
+        dustText = (TextView) view.findViewById(R.id.dustText);
+
+        tempText.setText(((MainActivity)MainActivity.context).sensorData[0] + "℃");
+        humText.setText(((MainActivity)MainActivity.context).sensorData[1] + "%");
+        dustText.setText(((MainActivity)MainActivity.context).sensorData[2] + "㎍/㎥");
 
         lampButton.setOnClickListener(new View.OnClickListener() {
             @Override
