@@ -23,7 +23,7 @@ void DHT::DHTProcess()
     std::cout << "DHT11 Start\n";
     DHTSend();
     DHTResponse();
-    bool tmp = DHTGetData();
+    DHTGetData();
 } // DHT11 센서 데이터 수집 싸이클
 void DHT::DHTSend()
 {
@@ -36,23 +36,37 @@ void DHT::DHTSend()
 } // DHT11에게 수신 준비를 알리는 함수
 void DHT::DHTResponse()
 {
-    std::cout << "DHTResponse\n";
-    int count = 0;
+    std::cout << "DHTResponse";
+    char count = 0;
     pinMode(DHT11, INPUT);
-
+    std::cout << '.';
     while (digitalRead(DHT11) != LOW)
     {
         delayMicroseconds(1);
-        count++;
-        if (count >= 255) DHTGetData();
+        if(count++ >= 255)
+        {
+            count = 0;
+            std::cout << "break1";
+            break;
+        }
     }
-    while (digitalRead(DHT11) != HIGH);
+    std::cout << '.';
+    while (digitalRead(DHT11) != HIGH)
+    {
+        delayMicroseconds(1);
+        if(count++ >= 255)
+        {
+            std::cout << "break2";
+            break;
+        }
+    }
+    std::cout << ".\n";
     while (digitalRead(DHT11) != LOW);
 } // DHT11이 사용자에게 송신 준비를 알리는 함수
 bool DHT::DHTGetData()
 {
     std::cout << "DHTGetData\n";
-    int count = 0;
+    char count = 0;
     int j;
     for (j = 0; j < 40; j++)
     {
@@ -61,14 +75,22 @@ bool DHT::DHTGetData()
         {
             delayMicroseconds(1);
             count++;
-            if (count >= 255) return false;
+            if (count >= 255)
+            {
+                std::cout << "break1\n";
+                return false;
+            }
         } // 일정 시간이 지나면 false 리턴
         count = 0;
         while (digitalRead(DHT11) == HIGH)
         {
             delayMicroseconds(1);
             count++;
-            if (count >= 255) return false;
+            if (count >= 255)
+            {
+                std::cout << "break2\n";
+                return false;
+            }
         } // 일정 시간이 지나면 false 리턴
         dhtData[j / 8] <<= 1;
         if (count > 30)
@@ -85,6 +107,7 @@ bool DHT::DHTGetData()
     } // 마지막 8개 비트와 나머지 32개의 비트의 합이 같아야 함
     else
     {
+        std::cout << "break3\n";
         return false;
     }
 } // DHT11에서 데이터를 받아오는 함수
