@@ -6,10 +6,6 @@
 #include <QPixmap>
 #include <QtNetwork>
 #include "processthread.h"
-#include "tcpthread.h"
-
-//class QTcpServer;
-//class QNetworkSession;
 
 namespace Ui {
 class Dialog;
@@ -32,6 +28,8 @@ private slots:
     void showTime();
 
     void newConnection();
+    void readData();
+    void disConnected();
 
 private:
     Ui::Dialog *ui;
@@ -42,6 +40,8 @@ private:
 
     QTcpServer* tcpServer;
     QTcpSocket* client;
+
+    int con; // server 접속한 소켓 수
 };
 
 #endif // DIALOG_H

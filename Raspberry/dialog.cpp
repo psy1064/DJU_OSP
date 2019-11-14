@@ -19,7 +19,7 @@ Dialog::Dialog(QWidget *parent) :
     ui->setupUi(this);
 
     tcpInit();
-
+    con = 0;
     red.setColor(QPalette::Active, QPalette::WindowText, Qt::red);
     orange.setColor(QPalette::Active, QPalette::WindowText, QColor(255,127,0)); // 주황색 지정
     blue.setColor(QPalette::Active, QPalette::WindowText, Qt::blue);
@@ -52,7 +52,7 @@ Dialog::Dialog(QWidget *parent) :
 
     pthread = new processThread(this);			// 센서 데이터 수집 쓰레드 동적 할당
     connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
-    connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
+
     pthread->start();
 
     timer = new QTimer(this);
@@ -147,21 +147,34 @@ void Dialog::tcpInit()
 void Dialog::newConnection()
 {
     std::cout << "connected\n";
-    static int con = 0 ;
+    if(con == 0)
+    {
+        connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
+        ui->isConnectedValue->setText("connectd" + QString::number(++con));
+        client = tcpServer->nextPendingConnection();
 
-    ui->isConnectedValue->setText("connectd" + QString::number(++con));
-
-    client = tcpServer->nextPendingConnection();
-
+        connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
+        connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
+    }
 } // 서버에 접속 시
 void Dialog::sendValue(int temp, int hum, int dust)
 {
-    QByteArray data;
+    std::cout << "sendData\n";
+    QByteArray tempbyte = QByteArray::number(temp);
+    QByteArray humbyte = QByteArray::number(hum);
+    QByteArray dustbyte = QByteArray::number(dust);
 
-    data.append(QString::number(temp));
-    data.append(QString::number(hum));
-    data.append(QString::number(dust));
-
-    client->write(data);
+    client->write(tempbyte+","+humbyte+","+dustbyte);
 }
+void Dialog::readData()
+{
+    std::cout << "readData\n";
 
+}
+void Dialog::disConnected()
+{
+    std::cout << "disconnected\n";
+    ui->isConnectedValue->setText("Server Open");
+    client->close();
+    --con;
+}
