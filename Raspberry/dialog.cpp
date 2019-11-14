@@ -18,8 +18,10 @@ Dialog::Dialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    tcpInit();
+
     red.setColor(QPalette::Active, QPalette::WindowText, Qt::red);
-    orange.setColor(QPalette::Active, QPalette::WindowText, QColor(255,127,0)); //
+    orange.setColor(QPalette::Active, QPalette::WindowText, QColor(255,127,0)); // 주황색 지정
     blue.setColor(QPalette::Active, QPalette::WindowText, Qt::blue);
     green.setColor(QPalette::Active, QPalette::WindowText, Qt::green);      	// Palette에 색 설정
 
@@ -50,7 +52,7 @@ Dialog::Dialog(QWidget *parent) :
 
     pthread = new processThread(this);			// 센서 데이터 수집 쓰레드 동적 할당
     connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
-
+    connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
     pthread->start();
 
     timer = new QTimer(this);
@@ -88,8 +90,7 @@ void Dialog::on_onButton_clicked()
     softPwmWrite(SERVO, 15);
     delay(100);
     pinMode(SERVO, INPUT);
-}
-
+} // 서보모터 On
 void Dialog::on_offButton_clicked()
 {
     std::cout << "turnoff\n";
@@ -101,8 +102,7 @@ void Dialog::on_offButton_clicked()
     softPwmWrite(SERVO, 15);
     delay(100);
     pinMode(SERVO, INPUT);
-}
-
+} // 서보모터 Off
 void Dialog::showTime()
 {
     QTime time = QTime::currentTime();
@@ -116,4 +116,52 @@ void Dialog::showTime()
 
     ui->dateValue->setText(dateText);
     ui->timeValue->setText(timeText);
+} // 실행화면에 현재 날짜와 시간 출력
+void Dialog::tcpInit()
+{
+    QHostAddress hostAddress;
+    QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
+
+    for (int i = 0 ; i < ipAddressesList.size() ; ++i)
+    {
+        if(ipAddressesList.at(i) != QHostAddress::LocalHost && ipAddressesList.at(i).toIPv4Address())
+        {
+            hostAddress = ipAddressesList.at(i);
+            break;
+        }
+    }
+
+    if(hostAddress.toString().isEmpty())    hostAddress = QHostAddress(QHostAddress::LocalHost);
+
+    tcpServer = new QTcpServer(this);
+    if(!tcpServer->listen(hostAddress, 9999))
+    {
+        std::cout << "connect Failed\n";
+        close();
+    }
+    else std::cout << "Tcp Server Open\n";
+
+    ui->isConnectedValue->setText(tr("Server running IP : %1 PORT : %2").arg(hostAddress.toString()).arg(tcpServer->serverPort()));
+    connect(tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
+} // tcp 서버 오픈
+void Dialog::newConnection()
+{
+    std::cout << "connected\n";
+    static int con = 0 ;
+
+    ui->isConnectedValue->setText("connectd" + QString::number(++con));
+
+    client = tcpServer->nextPendingConnection();
+
+} // 서버에 접속 시
+void Dialog::sendValue(int temp, int hum, int dust)
+{
+    QByteArray data;
+
+    data.append(QString::number(temp));
+    data.append(QString::number(hum));
+    data.append(QString::number(dust));
+
+    client->write(data);
 }
+
