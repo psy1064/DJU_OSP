@@ -22,7 +22,6 @@ public class CCTV extends Fragment {
     WebView webView;
     WebSettings webSettings;
     TextView callText;
-    BottomNavigationView bottomNavigationView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cctv, container, false);

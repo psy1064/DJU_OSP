@@ -22,7 +22,25 @@
             android:id="@+id/switch1"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="감시모드 On / Off"
+            android:text="CCTV            On / Off"
+            android:textSize="20sp"
+            android:paddingLeft="40dp"
+            android:paddingRight="50dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@android:color/white">
+
+        <Switch
+            android:id="@+id/switch2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="감시모드       On / Off"
             android:textSize="20sp"
             android:paddingLeft="40dp"
             android:paddingRight="50dp"
