@@ -2,6 +2,7 @@
 #define PROCESSTHREAD_H
 
 #include <QThread>
+
 #include "process.h"
 
 class processThread : public QThread
@@ -15,6 +16,9 @@ private:
     void run();
 signals:
     void setValue(int temp, int hum, int dust);
+
+
+
 };
 
 #endif // PROCESSTHREAD_H
