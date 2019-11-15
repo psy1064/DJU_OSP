@@ -142,11 +142,12 @@ void Dialog::tcpInit()
     else std::cout << "Tcp Server Open\n";
 
     ui->isConnectedValue->setText(tr("Server running IP : %1 PORT : %2").arg(hostAddress.toString()).arg(tcpServer->serverPort()));	// 현재 서버 ip와 포트 출력
+
     connect(tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));	// 서버에 소켓이 접속했을 때 newConnection() 실행
 } // tcp 소켓 통신 서버 오픈 및 초기화
 void Dialog::newConnection()
 {
-    std::cout << "connected\n";
+    std::cout << "connected" << con << std::endl;
     if(con == 0)
     {
         connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
@@ -155,6 +156,7 @@ void Dialog::newConnection()
 
         connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
         connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
+        disconnect(tcpServer, SIGNAL(newConnection()),this,SLOT(newConnection()));
     }
 } // 서버에 소켓이 접속했을 때 실행
 void Dialog::sendValue(int temp, int hum, int dust)
@@ -176,4 +178,8 @@ void Dialog::disConnected()
     ui->isConnectedValue->setText("Server Open");
     client->close();
     --con;
+
+    disconnect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
+    if(con==0)
+        connect(tcpServer,SIGNAL(newConnection()),this,SLOT(newConnection()));
 } // 소켓 연결 해제
