@@ -18,10 +18,10 @@ Dialog::Dialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    tcpInit();
+    tcpInit();	// 소켓 서버 오픈 및 초기화
     con = 0;
     red.setColor(QPalette::Active, QPalette::WindowText, Qt::red);
-    orange.setColor(QPalette::Active, QPalette::WindowText, QColor(255,127,0)); // 주황색 지정
+    orange.setColor(QPalette::Active, QPalette::WindowText, QColor(255,127,0)); // 주황색
     blue.setColor(QPalette::Active, QPalette::WindowText, Qt::blue);
     green.setColor(QPalette::Active, QPalette::WindowText, Qt::green);      	// Palette에 색 설정
 
@@ -48,17 +48,17 @@ Dialog::Dialog(QWidget *parent) :
 
     softPwmCreate(SERVO, 0, 100);
     softPwmWrite(SERVO, 15);
-    pinMode(SERVO, INPUT);
+    pinMode(SERVO, INPUT);		// 서보모터 Arm 중간 위치
 
-    pthread = new processThread(this);			// 센서 데이터 수집 쓰레드 동적 할당
+    pthread = new processThread(this);	// 센서 데이터 수집 쓰레드 동적 할당
     connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
 
-    pthread->start();
+    pthread->start();	// 쓰레드 run
 
-    timer = new QTimer(this);
-    connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));
-    showTime();
-    timer->start(1000);
+    timer = new QTimer(this);	// 화면에 시간을 표시할 타이머 설정
+    connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));	// 설정한 시간마다 showTime() 실행
+    showTime();	// 처음 한번 현재 시간 출력
+    timer->start(1000);	// 1초 간격으로 timer 동작
 }
 void Dialog::showValue(int temp, int hum, int dust)
 {
@@ -73,7 +73,7 @@ void Dialog::showValue(int temp, int hum, int dust)
     else if(dust > 80 && dust <= 150)   ui->dustValue->setPalette(orange);
     else if(dust > 150)                 ui->dustValue->setPalette(red);
     // 미세먼지 범위에 따라 색 변경
-}
+} // 센서 데이터 화면에 출력
 Dialog::~Dialog()
 {
     delete ui;
@@ -89,8 +89,8 @@ void Dialog::on_onButton_clicked()
     delay(100);
     softPwmWrite(SERVO, 15);
     delay(100);
-    pinMode(SERVO, INPUT);
-} // 서보모터 On
+    pinMode(SERVO, INPUT);	// 서보모터 떨림 현상 방지
+} // 화면의 On 버튼을 눌렀을 때 서보모터로 전등  On
 void Dialog::on_offButton_clicked()
 {
     std::cout << "turnoff\n";
@@ -101,22 +101,22 @@ void Dialog::on_offButton_clicked()
     delay(100);
     softPwmWrite(SERVO, 15);
     delay(100);
-    pinMode(SERVO, INPUT);
-} // 서보모터 Off
+    pinMode(SERVO, INPUT);	// 서보모터 떨림 현상 방지
+} // 화면의 Off 버튼을 눌렀을 때 서보모터로 전등  Off
 void Dialog::showTime()
 {
-    QTime time = QTime::currentTime();
-    QDate date = QDate::currentDate();
+    QTime time = QTime::currentTime();	// 현재 시간
+    QDate date = QDate::currentDate();	// 현재 날짜
     QString dateText;
     QString timeText;
 
-    dateText = date.toString("  yyyy-MM-dd");
+    dateText = date.toString("  yyyy-MM-dd");	// 2019-11-15 형식으로 출력
     if(time.second()%2==0)  timeText = time.toString("hh:mm:ss");
     else                    timeText = time.toString("hh mm ss");
-
+    // 2초마다 한번 씩 ':' 깜빡임
     ui->dateValue->setText(dateText);
     ui->timeValue->setText(timeText);
-} // 실행화면에 현재 날짜와 시간 출력
+} // 화면에 현재 날짜 시간 출력
 void Dialog::tcpInit()
 {
     QHostAddress hostAddress;
@@ -134,16 +134,16 @@ void Dialog::tcpInit()
     if(hostAddress.toString().isEmpty())    hostAddress = QHostAddress(QHostAddress::LocalHost);
 
     tcpServer = new QTcpServer(this);
-    if(!tcpServer->listen(hostAddress, 9999))
+    if(!tcpServer->listen(hostAddress, 9999))	// 서버 오픈 ip : hostaddress, port : 9999
     {
         std::cout << "connect Failed\n";
         close();
     }
     else std::cout << "Tcp Server Open\n";
 
-    ui->isConnectedValue->setText(tr("Server running IP : %1 PORT : %2").arg(hostAddress.toString()).arg(tcpServer->serverPort()));
-    connect(tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));
-} // tcp 서버 오픈
+    ui->isConnectedValue->setText(tr("Server running IP : %1 PORT : %2").arg(hostAddress.toString()).arg(tcpServer->serverPort()));	// 현재 서버 ip와 포트 출력
+    connect(tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));	// 서버에 소켓이 접속했을 때 newConnection() 실행
+} // tcp 소켓 통신 서버 오픈 및 초기화
 void Dialog::newConnection()
 {
     std::cout << "connected\n";
@@ -156,7 +156,7 @@ void Dialog::newConnection()
         connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
         connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
     }
-} // 서버에 접속 시
+} // 서버에 소켓이 접속했을 때 실행
 void Dialog::sendValue(int temp, int hum, int dust)
 {
     std::cout << "sendData\n";
@@ -165,16 +165,15 @@ void Dialog::sendValue(int temp, int hum, int dust)
     QByteArray dustbyte = QByteArray::number(dust);
 
     client->write(tempbyte+","+humbyte+","+dustbyte);
-}
+} // 수집된 센서 데이터 어플리케이션에 송신
 void Dialog::readData()
 {
     std::cout << "readData\n";
-
-}
+} // 데이터 수신 함수
 void Dialog::disConnected()
 {
     std::cout << "disconnected\n";
     ui->isConnectedValue->setText("Server Open");
     client->close();
     --con;
-}
+} // 소켓 연결 해제
