@@ -24,11 +24,14 @@
 
 ## 작품 구조도
 
-![1573468714032](C:\Users\SYPark\AppData\Roaming\Typora\typora-user-images\1573468714032.png)
+![structure.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/structure.png?raw=true)
+
+
+
+
 
 ## 실행화면
 
-![1573472044003](C:\Users\SYPark\AppData\Roaming\Typora\typora-user-images\1573472044003.png)
+![execute1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/execute1.png?raw=true)
 
-![1573472115436](C:\Users\SYPark\AppData\Roaming\Typora\typora-user-images\1573472115436.png)
-
+![execute2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/execute2.png?raw=true)
