@@ -61,7 +61,15 @@ void DHT::DHTResponse()
         }
     }
     std::cout << ".\n";
-    while (digitalRead(DHT11) != LOW);
+    while (digitalRead(DHT11) != LOW)
+    {
+        delayMicroseconds(1);
+        if(count++ >= 255)
+        {
+            std::cout << "break2";
+            break;
+        }
+    }
 } // DHT11이 사용자에게 송신 준비를 알리는 함수
 bool DHT::DHTGetData()
 {

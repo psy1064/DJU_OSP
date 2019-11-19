@@ -27,7 +27,7 @@ void PROCESS::processCycle()
 {
     cout << "count = " << ++count << endl;
     dht.DHTProcess();
-    pms.PMSReceive();
+    pms.PMSReceive();    
     printData();
 } // 데이터 수집
 void PROCESS::printData()
@@ -37,11 +37,12 @@ void PROCESS::printData()
     cout << "PM10 = " << pms.getPM() << endl;
     cout << "============================" << endl;
 }
-void PROCESS::putData(int* t, int* h, int* d)
+void PROCESS::putData(int* temp, int* hum, int* dust, int* human)
 {
-    *h = dht.getHum();
-    *t = dht.getTemp();
-    *d = pms.getPM();
+    *temp = dht.getTemp();
+    *hum = dht.getHum();
+    *dust = pms.getPM();
+    *human = digitalRead(HUMAN);
 }
 void signal_handler(int signo)
 {

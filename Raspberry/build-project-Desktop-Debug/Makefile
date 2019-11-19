@@ -12,10 +12,10 @@ MAKEFILE      = Makefile
 
 CC            = gcc
 CXX           = g++
-DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
+DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../../Raspberry -I. -isystem /usr/local/include -I/usr/lib/arm-linux-gnueabihf -isystem /usr/include/arm-linux-gnueabihf/qt5 -isystem /usr/include/arm-linux-gnueabihf/qt5/QtWidgets -isystem /usr/include/arm-linux-gnueabihf/qt5/QtGui -isystem /usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I. -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++
+INCPATH       = -I../../Raspberry -I. -isystem /usr/local/include -I/usr/lib/arm-linux-gnueabihf -isystem /usr/include/arm-linux-gnueabihf/qt5 -isystem /usr/include/arm-linux-gnueabihf/qt5/QtWidgets -isystem /usr/include/arm-linux-gnueabihf/qt5/QtGui -isystem /usr/include/arm-linux-gnueabihf/qt5/QtNetwork -isystem /usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I. -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++
 QMAKE         = /usr/lib/qt5/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -38,7 +38,7 @@ DISTNAME      = project1.0.0
 DISTDIR = /home/pi/Github/DJU_OSP/Raspberry/build-project-Desktop-Debug/.tmp/project1.0.0
 LINK          = g++
 LFLAGS        = 
-LIBS          = $(SUBLIBS) -L/home/pi/Github/DJU_OSP/Raspberry/../../../../../usr/local/lib/ -lwiringPi -L/home/pi/Github/DJU_OSP/Raspberry/../../../../../usr/lib/arm-linux-gnueabihf/ -lQt5Widgets -lQt5Gui -lQt5Core -lGLESv2 -lpthread -latomic 
+LIBS          = $(SUBLIBS) -L/home/pi/Github/DJU_OSP/Raspberry/../../../../../usr/local/lib/ -lwiringPi -lQt5Widgets -lQt5Gui -lQt5Network -lQt5Core -lGLESv2 -lpthread -latomic 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -51,20 +51,20 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = ../main.cpp \
-		../mainwindow.cpp \
 		../dht.cpp \
 		../pms.cpp \
 		../process.cpp \
-		../widget.cpp moc_mainwindow.cpp \
-		moc_widget.cpp
+		../dialog.cpp \
+		../processthread.cpp moc_dialog.cpp \
+		moc_processthread.cpp
 OBJECTS       = main.o \
-		mainwindow.o \
 		dht.o \
 		pms.o \
 		process.o \
-		widget.o \
-		moc_mainwindow.o \
-		moc_widget.o
+		dialog.o \
+		processthread.o \
+		moc_dialog.o \
+		moc_processthread.o
 DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/common/unix.conf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/common/linux.conf \
@@ -149,16 +149,16 @@ DIST          = /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/lex.prf \
-		../../project.pro ../mainwindow.h \
-		../dht.h \
+		../../project.pro ../dht.h \
 		../process.h \
 		../pms.h \
-		../widget.h ../main.cpp \
-		../mainwindow.cpp \
+		../dialog.h \
+		../processthread.h ../main.cpp \
 		../dht.cpp \
 		../pms.cpp \
 		../process.cpp \
-		../widget.cpp
+		../dialog.cpp \
+		../processthread.cpp
 QMAKE_TARGET  = project
 DESTDIR       = 
 TARGET        = project
@@ -167,7 +167,7 @@ TARGET        = project
 first: all
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ui_dialog.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: ../project.pro /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++/qmake.conf /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf \
@@ -257,6 +257,7 @@ Makefile: ../project.pro /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++/qmak
 		../project.pro \
 		/usr/lib/arm-linux-gnueabihf/libQt5Widgets.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Gui.prl \
+		/usr/lib/arm-linux-gnueabihf/libQt5Network.prl \
 		/usr/lib/arm-linux-gnueabihf/libQt5Core.prl
 	$(QMAKE) -o Makefile ../project.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
 /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/spec_pre.prf:
@@ -346,6 +347,7 @@ Makefile: ../project.pro /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++/qmak
 ../project.pro:
 /usr/lib/arm-linux-gnueabihf/libQt5Widgets.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Gui.prl:
+/usr/lib/arm-linux-gnueabihf/libQt5Network.prl:
 /usr/lib/arm-linux-gnueabihf/libQt5Core.prl:
 qmake: FORCE
 	@$(QMAKE) -o Makefile ../project.pro -spec linux-g++ CONFIG+=debug CONFIG+=qml_debug
@@ -362,9 +364,9 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../mainwindow.h ../dht.h ../process.h ../pms.h ../widget.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../main.cpp ../mainwindow.cpp ../dht.cpp ../pms.cpp ../process.cpp ../widget.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../mainwindow.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../dht.h ../process.h ../pms.h ../dialog.h ../processthread.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../main.cpp ../dht.cpp ../pms.cpp ../process.cpp ../dialog.cpp ../processthread.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../dialog.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -396,29 +398,36 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -g -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /usr/lib/arm-linux-gnueabihf/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_widget.cpp
+compiler_moc_header_make_all: moc_dialog.cpp moc_processthread.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_widget.cpp
-moc_mainwindow.cpp: ../mainwindow.h \
+	-$(DEL_FILE) moc_dialog.cpp moc_processthread.cpp
+moc_dialog.cpp: ../processthread.h \
+		../process.h \
+		../dht.h \
+		../pms.h \
+		../dialog.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Github/DJU_OSP/Raspberry/build-project-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Github/DJU_OSP/Raspberry -I/usr/local/include -I/usr/lib/arm-linux-gnueabihf -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../mainwindow.h -o moc_mainwindow.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Github/DJU_OSP/Raspberry/build-project-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Github/DJU_OSP/Raspberry -I/usr/local/include -I/usr/lib/arm-linux-gnueabihf -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../dialog.h -o moc_dialog.cpp
 
-moc_widget.cpp: ../widget.h \
+moc_processthread.cpp: ../process.h \
+		../dht.h \
+		../pms.h \
+		../processthread.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
-	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Github/DJU_OSP/Raspberry/build-project-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Github/DJU_OSP/Raspberry -I/usr/local/include -I/usr/lib/arm-linux-gnueabihf -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../widget.h -o moc_widget.cpp
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Github/DJU_OSP/Raspberry/build-project-Desktop-Debug/moc_predefs.h -I/usr/lib/arm-linux-gnueabihf/qt5/mkspecs/linux-g++ -I/home/pi/Github/DJU_OSP/Raspberry -I/usr/local/include -I/usr/lib/arm-linux-gnueabihf -I/usr/include/arm-linux-gnueabihf/qt5 -I/usr/include/arm-linux-gnueabihf/qt5/QtWidgets -I/usr/include/arm-linux-gnueabihf/qt5/QtGui -I/usr/include/arm-linux-gnueabihf/qt5/QtNetwork -I/usr/include/arm-linux-gnueabihf/qt5/QtCore -I. -I/usr/include/c++/8 -I/usr/include/arm-linux-gnueabihf/c++/8 -I/usr/include/c++/8/backward -I/usr/lib/gcc/arm-linux-gnueabihf/8/include -I/usr/local/include -I/usr/lib/gcc/arm-linux-gnueabihf/8/include-fixed -I/usr/include/arm-linux-gnueabihf -I/usr/include ../processthread.h -o moc_processthread.cpp
 
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h
+compiler_uic_make_all: ui_dialog.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h
-ui_mainwindow.h: ../mainwindow.ui \
+	-$(DEL_FILE) ui_dialog.h
+ui_dialog.h: ../dialog.ui \
 		/usr/lib/qt5/bin/uic
-	/usr/lib/qt5/bin/uic ../mainwindow.ui -o ui_mainwindow.h
+	/usr/lib/qt5/bin/uic ../dialog.ui -o ui_dialog.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -430,16 +439,12 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
-main.o: ../main.cpp ../mainwindow.h \
+main.o: ../main.cpp ../dialog.h \
+		../processthread.h \
 		../process.h \
 		../dht.h \
-		../pms.h \
-		../widget.h
+		../pms.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
-
-mainwindow.o: ../mainwindow.cpp ../mainwindow.h \
-		ui_mainwindow.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../mainwindow.cpp
 
 dht.o: ../dht.cpp ../dht.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dht.o ../dht.cpp
@@ -452,14 +457,26 @@ process.o: ../process.cpp ../process.h \
 		../pms.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o process.o ../process.cpp
 
-widget.o: ../widget.cpp ../widget.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o widget.o ../widget.cpp
+dialog.o: ../dialog.cpp ../dialog.h \
+		../processthread.h \
+		../process.h \
+		../dht.h \
+		../pms.h \
+		ui_dialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o dialog.o ../dialog.cpp
 
-moc_mainwindow.o: moc_mainwindow.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
+processthread.o: ../processthread.cpp ../processthread.h \
+		../process.h \
+		../dht.h \
+		../pms.h \
+		../dialog.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o processthread.o ../processthread.cpp
 
-moc_widget.o: moc_widget.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_widget.o moc_widget.cpp
+moc_dialog.o: moc_dialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_dialog.o moc_dialog.cpp
+
+moc_processthread.o: moc_processthread.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_processthread.o moc_processthread.cpp
 
 ####### Install
 

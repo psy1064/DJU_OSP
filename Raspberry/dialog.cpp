@@ -51,7 +51,7 @@ Dialog::Dialog(QWidget *parent) :
     pinMode(SERVO, INPUT);		// 서보모터 Arm 중간 위치
 
     pthread = new processThread(this);	// 센서 데이터 수집 쓰레드 동적 할당
-    connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
+    connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
 
     pthread->start();	// 쓰레드 run
 
@@ -150,27 +150,33 @@ void Dialog::newConnection()
     std::cout << "connected" << con << std::endl;
     if(con == 0)
     {
-        connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
         ui->isConnectedValue->setText("connectd" + QString::number(++con));
         client = tcpServer->nextPendingConnection();
 
+        connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
         connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
         connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
         disconnect(tcpServer, SIGNAL(newConnection()),this,SLOT(newConnection()));
     }
 } // 서버에 소켓이 접속했을 때 실행
-void Dialog::sendValue(int temp, int hum, int dust)
+void Dialog::sendValue(int temp, int hum, int dust,int human)
 {
     std::cout << "sendData\n";
     QByteArray tempbyte = QByteArray::number(temp);
     QByteArray humbyte = QByteArray::number(hum);
     QByteArray dustbyte = QByteArray::number(dust);
+    QByteArray humanbyte = QByteArray::number(human);
 
-    client->write(tempbyte+","+humbyte+","+dustbyte);
+    client->write(tempbyte+","+humbyte+","+dustbyte+","+humanbyte);
 } // 수집된 센서 데이터 어플리케이션에 송신
 void Dialog::readData()
 {
     std::cout << "readData\n";
+    if(client->bytesAvailable()>=0)
+    {
+        QByteArray data = client->readAll();
+    //    std::cout << data.toStdString() << std::endl;
+    }
 } // 데이터 수신 함수
 void Dialog::disConnected()
 {
@@ -179,7 +185,7 @@ void Dialog::disConnected()
     client->close();
     --con;
 
-    disconnect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
+    disconnect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
     if(con==0)
         connect(tcpServer,SIGNAL(newConnection()),this,SLOT(newConnection()));
 } // 소켓 연결 해제

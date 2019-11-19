@@ -14,7 +14,7 @@ public:
 	PROCESS();
 	void processCycle();
 	void printData();
-    void putData(int* t, int* h, int* d);
+    void putData(int* temp, int* hum, int* dust, int* human);
 };
 
 void signal_handler(int signo);
