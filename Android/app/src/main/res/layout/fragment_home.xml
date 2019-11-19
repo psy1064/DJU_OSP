@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Home">
 
     <RelativeLayout
@@ -11,86 +12,200 @@
 
         <TextView
             android:id="@+id/dustText"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="106dp"
-            android:layout_marginTop="45dp"
-            android:layout_marginEnd="105dp"
-            android:layout_marginRight="105dp"
-            android:background="@drawable/oval"
-            android:gravity="center"
-            android:text="5"
-            android:textSize="25sp" />
-
-        <TextView
-            android:id="@+id/humText"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="173dp"
-            android:layout_marginTop="167dp"
-            android:layout_marginEnd="38dp"
-            android:layout_marginRight="38dp"
-            android:background="@drawable/oval"
-            android:gravity="center"
-            android:text="70%"
-            android:textSize="25sp" />
-
-        <TextView
-            android:id="@+id/tempText"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginLeft="38dp"
-            android:layout_marginTop="167dp"
-            android:layout_marginEnd="173dp"
-            android:layout_marginRight="173dp"
-            android:background="@drawable/oval"
-            android:gravity="center"
-            android:text="30℃"
-            android:textSize="25sp" />
-
-        <Button
-            android:id="@+id/lampButton"
-            android:text="전등\n\non / off"
-            android:textSize="30sp"
-            android:layout_width="187dp"
+            android:layout_width="210dp"
             android:layout_height="210dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginStart="15dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="416dp"
-            android:layout_marginEnd="209dp"
-            android:layout_marginRight="209dp"
-            android:background="@drawable/rect" />
+            android:layout_marginStart="106dp"
+            android:layout_marginLeft="106dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginEnd="106dp"
+            android:layout_marginRight="106dp"
+            android:background="@drawable/oval"
+            android:gravity="center"
+            android:text="-"
+            android:textColor="@android:color/black"
+            android:textSize="30sp" />
 
-        <Button
-            android:id="@+id/alarmButton"
-            android:text="알람\n\noff"
-            android:textSize="30sp"
-            android:layout_width="187dp"
+        <TextView
+            android:id="@+id/tempText"
+            android:layout_width="210dp"
             android:layout_height="210dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="415dp"
-            android:layout_marginEnd="14dp"
-            android:layout_marginRight="14dp"
-            android:background="@drawable/rect" />
+            android:layout_marginStart="30dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="185dp"
+            android:layout_marginEnd="181dp"
+            android:layout_marginRight="181dp"
+            android:background="@drawable/oval"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:text="-"
+            android:textSize="30sp" />
+
+
+        <TextView
+            android:id="@+id/humText"
+            android:layout_width="210dp"
+            android:layout_height="210dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="181dp"
+            android:layout_marginLeft="181dp"
+            android:layout_marginTop="185dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/oval"
+            android:textColor="@android:color/black"
+            android:gravity="center"
+            android:text="-"
+            android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/dustLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignTop="@+id/dustText"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginStart="175dp"
+            android:layout_marginLeft="175dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="175dp"
+            android:layout_marginRight="175dp"
+            app:srcCompat="@drawable/dust" />
+
+        <ImageView
+            android:id="@+id/humLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignBottom="@+id/humText"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="100dp"
+            android:layout_marginEnd="100dp"
+            android:layout_marginBottom="5dp"
+            app:srcCompat="@drawable/hum" />
+
+        <ImageView
+            android:id="@+id/tempLogo"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignBottom="@+id/tempText"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="100dp"
+            android:layout_marginLeft="100dp"
+            android:layout_marginBottom="5dp"
+            app:srcCompat="@drawable/temperature" />
+
+        <ImageView
+            android:id="@+id/lightBulbLogo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/background"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="34dp"
+            android:layout_marginLeft="34dp"
+            android:layout_marginTop="470dp"
+            app:srcCompat="@drawable/lightbulb" />
+
+        <TextView
+            android:id="@+id/lightBulbText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/background"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="496dp"
+            android:layout_toEndOf="@+id/lightBulbLogo"
+            android:layout_toRightOf="@+id/lightBulbLogo"
+            android:text="전등 제어" />
+
+        <Button
+            android:id="@+id/turnOnButton"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/background"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="482dp"
+            android:layout_toEndOf="@+id/lightBulbText"
+            android:layout_toRightOf="@+id/lightBulbText"
+            android:text="ON"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+        <Button
+            android:id="@+id/turnOffButton"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/background"
+            android:layout_marginStart="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="482dp"
+            android:layout_toEndOf="@+id/turnOnButton"
+            android:layout_toRightOf="@+id/turnOnButton"
+            android:text="OFF"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+        <ImageView
+            android:id="@+id/alarmLogo"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignTop="@+id/background"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginStart="34dp"
+            android:layout_marginLeft="34dp"
+            android:layout_marginTop="550dp"
+            app:srcCompat="@drawable/alarm" />
+
+        <TextView
+            android:id="@+id/alarmText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/background"
+            android:layout_marginStart="35dp"
+            android:layout_marginLeft="35dp"
+            android:layout_marginTop="577dp"
+            android:layout_toEndOf="@+id/alarmLogo"
+            android:layout_toRightOf="@+id/alarmLogo"
+            android:text="알람 설정" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/background"
+            android:layout_marginStart="9dp"
+            android:layout_marginLeft="9dp"
+            android:layout_marginTop="569dp"
+            android:layout_toEndOf="@+id/alarmText"
+            android:layout_toRightOf="@+id/alarmText" />
+
+        <Button
+            android:id="@+id/setAlarmTimeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/background"
+            android:layout_marginStart="57dp"
+            android:layout_marginLeft="57dp"
+            android:layout_marginTop="564dp"
+            android:layout_toEndOf="@+id/lightBulbText"
+            android:layout_toRightOf="@+id/lightBulbText"
+            android:text="알람 시간 설정"
+            android:visibility="invisible" />
     </RelativeLayout>
 
 

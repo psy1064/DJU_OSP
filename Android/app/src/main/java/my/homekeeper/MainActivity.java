@@ -1,6 +1,7 @@
 package my.homekeeper;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.FragmentManager;
@@ -10,15 +11,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.Socket;
-
 
 public class MainActivity extends AppCompatActivity {
     BottomNavigationView bottomNavigationView;
@@ -34,8 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private Socket socket;
     private String ip = "121.153.150.157";
     private int port = 9999;
-    String sensorData[] = {"0","0","0"};
+    String sensorData[] = {"0","0","0","0"};
     public static Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,28 +53,40 @@ public class MainActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                byte[] buffer = new byte[1024];
-                int bytes;
-                try {
+                try{
                     socket = new Socket(ip,port);
                     dataInputStream = socket.getInputStream();
                     dataOutputStream = socket.getOutputStream();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                byte[] buffer = new byte[1024];
+                int bytes;
                 Log.d(TAG, "수신 시작");
                 while(true) {
                     try {
+                        Log.d(TAG, "수신 시작");
                         bytes = dataInputStream.read(buffer);
                         Log.d(TAG, "byte = " + bytes);
                         String tmp = new String(buffer, 0, bytes);
                         Log.d(TAG,tmp);
                         sensorData = tmp.split(",");
-                        homeFragment.tempText.setText(sensorData[0] + "℃");
-                        homeFragment.humText.setText(sensorData[1] + "%");
-                        homeFragment.dustText.setText(sensorData[2] + "㎍/㎥");
+
+                        homeFragment.tempText.setText(sensorData[0] + " ℃");
+                        homeFragment.humText.setText(sensorData[1] + " %");
+                        homeFragment.dustText.setText(sensorData[2] + " μg/m³");
+                        int dust = Integer.parseInt(sensorData[2]);
+                        if(dust >= 0 && dust<=30) homeFragment.dustText.setTextColor(Color.BLUE);
+                        else if(dust >= 31 && dust<=80) homeFragment.dustText.setTextColor(Color.GREEN);
+                        else if(dust >= 81 && dust<=150) homeFragment.dustText.setTextColor(Color.parseColor("#EFC81E"));
+                        else if(dust >= 151) homeFragment.dustText.setTextColor(Color.RED);
+                        if(sensorData[3] == "1") {
+
+                        }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        StringWriter stringWriter = new StringWriter();
+                        e.printStackTrace(new PrintWriter(stringWriter));
+                        Log.d(TAG,stringWriter.toString());
                     }
                 }
             }
@@ -104,24 +115,18 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestart() {
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
         super.onRestart();
-
         Log.d(TAG, "onRestart");
     } // 어플 다시 로딩 시 처음 fragment로 전환
 
+
     public void turnOn() throws IOException {
-        Toast.makeText(getApplicationContext(), "lampOn", Toast.LENGTH_LONG).show();
-        try {
-            //dataOutputStream.writeObject("ON");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        byte[] inst = "On".getBytes();
+        dataOutputStream.write(inst);
     }
     public void turnOff() throws IOException {
-        Toast.makeText(getApplicationContext(), "lampOff", Toast.LENGTH_LONG).show();
-        try {
-            // dataOutputStream.writeUTF("Off");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        byte[] inst = "Off".getBytes();
+        dataOutputStream.write(inst);
     }
 }
+
+
