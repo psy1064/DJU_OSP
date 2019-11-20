@@ -17,9 +17,9 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-    QDialog::showFullScreen();  // 실행화면 전체화면으로 설
+    QDialog::showFullScreen();  // 실행화면 전체화면으로 설정
     tcpInit();	// 소켓 서버 오픈 및 초기화
-    con = 0;정
+    con = 0;
     red.setColor(QPalette::Active, QPalette::WindowText, Qt::red);
     orange.setColor(QPalette::Active, QPalette::WindowText, QColor(255,127,0)); // 주황색
     blue.setColor(QPalette::Active, QPalette::WindowText, Qt::blue);
