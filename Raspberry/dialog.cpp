@@ -17,7 +17,7 @@ Dialog::Dialog(QWidget *parent) :
     ui(new Ui::Dialog)
 {
     ui->setupUi(this);
-
+    QDialog::showFullScreen();  // 실행화면 전체화면으로 설정
     tcpInit();	// 소켓 서버 오픈 및 초기화
     con = 0;
     red.setColor(QPalette::Active, QPalette::WindowText, Qt::red);
@@ -30,19 +30,19 @@ Dialog::Dialog(QWidget *parent) :
     humIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/picture/hum.png");
     dustIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/picture/dust.png");		// Icon에 넣을 사진 경로 지정
 
-    ui->lightIcon->setPixmap(lightIconPicture.scaled(64,64,Qt::KeepAspectRatio));
-    ui->tempIcon->setPixmap(tempIconPicture.scaled(64,64,Qt::KeepAspectRatio));
-    ui->humIcon->setPixmap(humIconPicture.scaled(64,64,Qt::KeepAspectRatio));
-    ui->dustIcon->setPixmap(dustIconPicture.scaled(64,64,Qt::KeepAspectRatio));	// Icon에 사진 넣기
+    ui->lightIcon->setPixmap(lightIconPicture.scaled(256,256,Qt::KeepAspectRatio));
+    ui->tempIcon->setPixmap(tempIconPicture.scaled(256,256,Qt::KeepAspectRatio));
+    ui->humIcon->setPixmap(humIconPicture.scaled(256,256,Qt::KeepAspectRatio));
+    ui->dustIcon->setPixmap(dustIconPicture.scaled(256,256,Qt::KeepAspectRatio));	// Icon에 사진 넣기
 
     ui->lightIcon->setAlignment(Qt::AlignCenter);
     ui->tempIcon->setAlignment(Qt::AlignCenter);
     ui->humIcon->setAlignment(Qt::AlignCenter);
     ui->dustIcon->setAlignment(Qt::AlignCenter);				// 사진 가운데 정렬
 
-    ui->tempValue->setFont(QFont("FibotoLt",16));
-    ui->humValue->setFont(QFont("FibotoLt",16));
-    ui->dustValue->setFont(QFont("FibotoLt",16));	// 데이터 출력 값 폰트, 글자 크기 설정
+    ui->tempValue->setFont(QFont("FibotoLt",52));
+    ui->humValue->setFont(QFont("FibotoLt",52));
+    ui->dustValue->setFont(QFont("FibotoLt",52));	// 데이터 출력 값 폰트, 글자 크기 설정
 
     if(wiringPiSetup()==-1) exit(1);
 
@@ -51,7 +51,7 @@ Dialog::Dialog(QWidget *parent) :
     pinMode(SERVO, INPUT);		// 서보모터 Arm 중간 위치
 
     pthread = new processThread(this);	// 센서 데이터 수집 쓰레드 동적 할당
-    connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
+    connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(showValue(int, int, int)));	// 센서 데이터 수집 쓰레드의 setValue 함수에서 값을 읽어와 showValue에 넣음
 
     pthread->start();	// 쓰레드 run
 
@@ -140,9 +140,6 @@ void Dialog::tcpInit()
         close();
     }
     else std::cout << "Tcp Server Open\n";
-
-    ui->isConnectedValue->setText(tr("Server running IP : %1 PORT : %2").arg(hostAddress.toString()).arg(tcpServer->serverPort()));	// 현재 서버 ip와 포트 출력
-
     connect(tcpServer, SIGNAL(newConnection()), this, SLOT(newConnection()));	// 서버에 소켓이 접속했을 때 newConnection() 실행
 } // tcp 소켓 통신 서버 오픈 및 초기화
 void Dialog::newConnection()
@@ -150,36 +147,41 @@ void Dialog::newConnection()
     std::cout << "connected" << con << std::endl;
     if(con == 0)
     {
-        connect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
-        ui->isConnectedValue->setText("connectd" + QString::number(++con));
         client = tcpServer->nextPendingConnection();
-
+        con++;
+        connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
         connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
         connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
         disconnect(tcpServer, SIGNAL(newConnection()),this,SLOT(newConnection()));
     }
 } // 서버에 소켓이 접속했을 때 실행
-void Dialog::sendValue(int temp, int hum, int dust)
+void Dialog::sendValue(int temp, int hum, int dust,int human)
 {
     std::cout << "sendData\n";
     QByteArray tempbyte = QByteArray::number(temp);
     QByteArray humbyte = QByteArray::number(hum);
     QByteArray dustbyte = QByteArray::number(dust);
+    QByteArray humanbyte = QByteArray::number(human);
 
-    client->write(tempbyte+","+humbyte+","+dustbyte);
+    client->write(tempbyte+","+humbyte+","+dustbyte+","+humanbyte);
 } // 수집된 센서 데이터 어플리케이션에 송신
 void Dialog::readData()
 {
     std::cout << "readData\n";
+    if(client->bytesAvailable()>=0)
+    {
+        QByteArray data = client->readAll();
+        if(data.toStdString() == "On")          on_onButton_clicked();
+        else if(data.toStdString() == "Off")    on_offButton_clicked();
+    }
 } // 데이터 수신 함수
 void Dialog::disConnected()
 {
     std::cout << "disconnected\n";
-    ui->isConnectedValue->setText("Server Open");
     client->close();
     --con;
 
-    disconnect(pthread, SIGNAL(setValue(int, int, int)), this, SLOT(sendValue(int, int, int)));    // 수집된 센서 데이터 송신
+    disconnect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
     if(con==0)
         connect(tcpServer,SIGNAL(newConnection()),this,SLOT(newConnection()));
 } // 소켓 연결 해제

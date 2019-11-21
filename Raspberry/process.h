@@ -9,15 +9,14 @@ class PROCESS {
 private:
 	DHT dht;
 	PMS pms;
-    //QLabel* temp, hum, dust;
+    int count;
 public:
 	PROCESS();
 	void processCycle();
 	void printData();
-    void putData(int h, int t, int d);
+    void putData(int* temp, int* hum, int* dust, int* human);
 };
 
-void humanInterrupt();
 void signal_handler(int signo);
 void call_exitfunc();
 

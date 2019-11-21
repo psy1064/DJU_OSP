@@ -15,10 +15,7 @@ private:
     PROCESS process;
     void run();
 signals:
-    void setValue(int temp, int hum, int dust);
-
-
-
+    void setValue(int temp, int hum, int dust, int human);
 };
 
 #endif // PROCESSTHREAD_H

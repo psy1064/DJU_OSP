@@ -28,7 +28,7 @@ private slots:
     void newConnection();				// 서버에 소켓이 접속했을 때 실행
     void readData();					// 데이터 수신 함수
     void disConnected();				// 소켓 연결 해제 시 실행
-    void sendValue(int temp, int hum, int dust);	// 수집된 센서 데이터 어플리케이션에 송신
+    void sendValue(int temp, int hum, int dust, int human);	// 수집된 센서 데이터 어플리케이션에 송신
 private:
     Ui::Dialog *ui;
     QTimer* timer;				// Timer 변수
