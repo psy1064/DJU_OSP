@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".cctvActivity">
+
+    <WebView
+        android:id="@+id/cctvWeb"
+        android:layout_width="match_parent"
+        android:layout_height="515dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white">
+        <Switch
+            android:id="@+id/detectSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="감시모드       On / Off"
+            android:textSize="20sp"
+            android:paddingLeft="40dp"
+            android:paddingRight="50dp"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/callText"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="신고하기"
+            android:background="@android:color/white"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:gravity="center" />
+    </LinearLayout>
+</LinearLayout>

@@ -4,31 +4,37 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CCTV extends Fragment {
+public class cctvActivity extends AppCompatActivity {
     final String TAG = "TAG+CCTVFragment";
+    public boolean isDetectEnabled = false;
+    public int flag = 0;
     WebView webView;
     WebSettings webSettings;
     TextView callText;
+    Switch aSwitch;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_cctv, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_cctv);
+
         Log.d(TAG,"Create CCTV Fragment");
 
-        webView = (WebView) view.findViewById(R.id.cctvWeb);
-        callText = (TextView) view.findViewById(R.id.callText);
+        webView = (WebView) findViewById(R.id.cctvWeb);
+        callText = (TextView) findViewById(R.id.callText);
+        aSwitch = (Switch) findViewById(R.id.detectSwitch);
 
         webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -43,7 +49,6 @@ public class CCTV extends Fragment {
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN : {
-                        Toast.makeText(getContext(), "Touch", Toast.LENGTH_LONG).show();
                         webView.reload();
                         break;
                     }
@@ -55,7 +60,7 @@ public class CCTV extends Fragment {
         callText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
                 alert.setTitle("신고");
                 alert.setMessage("신고하시겠습니까?");
                 alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -75,7 +80,21 @@ public class CCTV extends Fragment {
                 alertDialog.show();
             }
         });
-        return view;
-    }
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (aSwitch.isChecked() == true) {
+                    aSwitch.setText("감시모드 활성화 중");
+                    isDetectEnabled = true;
+                    flag = 1;
+                }
+                else {
+                    aSwitch.setText("감시모드 비활성화 중");
+                    isDetectEnabled = false;
+                    flag = 0;
+                }
 
+            }
+        });
+    }
 }
