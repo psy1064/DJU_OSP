@@ -6,13 +6,14 @@ import android.content.Intent;
 import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver {
-    Context context;
     String TAG = "TAG+AlarmReceiver";
+    public static final String ACTION_RESTART_SERVICE = "Restart";
     @Override
     public void onReceive(Context context, Intent intent) {
-        this.context = context;
         Log.d(TAG, "AlarmReceiver");
-        Intent in = new Intent(context, AlarmService.class);
-        context.startService(in);
+        if(intent.getAction().equals(ACTION_RESTART_SERVICE)) {
+            Intent in = new Intent(context, AlarmService.class);
+            context.startService(in);
+        }
     }
 }

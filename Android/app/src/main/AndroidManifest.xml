@@ -3,6 +3,7 @@
     package="my.homekeeper">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application
         android:allowBackup="true"
@@ -17,6 +18,7 @@
             android:enabled="true"
             android:exported="true" />
         <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".notificationBroadcast"/>
         <activity android:name=".AlarmActivity"></activity>
         <activity
             android:name=".MainActivity"
@@ -30,5 +32,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

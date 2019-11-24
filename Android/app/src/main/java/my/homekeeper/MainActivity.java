@@ -9,6 +9,7 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
@@ -25,8 +26,6 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.Socket;
 import java.util.Calendar;
 
@@ -50,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
     static boolean alarmActive = false;
     AlarmManager alarmManager;
     Intent alarmIntent;
-    PendingIntent alarmPendingIntent;
+    PendingIntent alarmPendingIntent, alarmCallPendingIntent, detectPendingIntent, dataPendingIntent;
+    NotificationManager alarmNotification, detectNotification, dataNotification;
     int alarmHour=0, alarmMinute=0;
     Calendar alarmCalendar;
 
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         context = this;
@@ -72,12 +73,82 @@ public class MainActivity extends AppCompatActivity {
         if(detectModeActive == true) detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
         if(alarmActive == true) alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
 
+        thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    Log.d(TAG, "소켓 연결");
+                    socket = new Socket(ip,port);
+                    dataInputStream = socket.getInputStream();
+                    dataOutputStream = socket.getOutputStream();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                byte[] buffer = new byte[1024];
+                int bytes;
+                Log.d(TAG, "수신 시작");
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
+                Intent intent = new Intent(getApplicationContext(), notificationBroadcast.class);
+                dataPendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
+                builder.setSmallIcon(R.drawable.applogo);
+                builder.setContentTitle("실내 환경 데이터");
+                builder.setContentIntent(dataPendingIntent);
+                builder.setContentText("온도 = 0 습도 = 0 미세먼지 = " );
+                //builder.setOngoing(true);
+                dataNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    dataNotification.createNotificationChannel(new NotificationChannel("default", "채널", NotificationManager.IMPORTANCE_LOW));
+                }
+                dataNotification.notify(0,builder.build());
+                while(true) {
+                    try {
+                        Log.d(TAG, "수신 대기");
+                        bytes = dataInputStream.read(buffer);
+                        Log.d(TAG, "byte = " + bytes);
+                        String tmp = new String(buffer, 0, bytes);
+                        Log.d(TAG,tmp);
+                        sensorData = tmp.split(",");
+                        tempText.setText(sensorData[0] + " ℃");
+                        humText.setText(sensorData[1] + " %");
+                        int dust = Integer.parseInt(sensorData[2]);
+                        if(dust >= 0 && dust <=30) {
+                            dustText.setTextColor(Color.BLUE);
+                            dustText.setText("좋음 (" + sensorData[2] + "㎍/㎥)");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 좋음 " + sensorData[2] + "㎍/㎥");
+                        } else if(dust >= 31 && dust <=80) {
+                            dustText.setTextColor(Color.GREEN);
+                            dustText.setText("보통 (" + sensorData[2] + "㎍/㎥)");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 보통 " + sensorData[2] + "㎍/㎥");
+                        } else if(dust >= 81 && dust <=150) {
+                            dustText.setTextColor(Color.parseColor("#FF7F00"));
+                            dustText.setText("나쁨 (" + sensorData[2] + "㎍/㎥)");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 나쁨 " + sensorData[2] + "㎍/㎥");
+                        } else if(dust >= 151) {
+                            dustText.setTextColor(Color.RED);
+                            dustText.setText("매우나쁨 (" + sensorData[2] + "㎍/㎥)");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 매우나쁨 " + sensorData[2] + "㎍/㎥");
+                        }
+                        if(sensorData[3].equals("1") && detectModeActive == true) {
+                            detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.oval));
+                            detectModeActive =false;
+                            showDetectNotify();
+                        }
+                        dataNotification.notify(0,builder.build());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        thread.start();
+        // tcp 소켓 통신 수신 쓰레드
         lightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("전등");
-                builder.setMessage("");
+                builder.setTitle("전등 제어");
+                builder.setMessage("전등을 키시겠습니까? 끄시겠습니까?");
                 builder.setPositiveButton("On", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -123,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(alarmActive == false) {
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, TimePickerDialog.THEME_HOLO_LIGHT,new TimePickerDialog.OnTimeSetListener() {
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT,new TimePickerDialog.OnTimeSetListener() {
                         @RequiresApi(api = Build.VERSION_CODES.M)
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -140,6 +211,8 @@ public class MainActivity extends AppCompatActivity {
 
                 } else {
                     alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.oval));
+                    alarmManager.cancel(alarmPendingIntent);
+                    alarmNotification.cancel(0);
                     alarmActive = false;
                 }
 
@@ -160,45 +233,16 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    socket = new Socket(ip,port);
-                    dataInputStream = socket.getInputStream();
-                    dataOutputStream = socket.getOutputStream();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                byte[] buffer = new byte[1024];
-                int bytes;
-                Log.d(TAG, "수신 시작");
-                while(true) {
-                    try {
-                        Log.d(TAG, "수신 대기");
-                        bytes = dataInputStream.read(buffer);
-                        Log.d(TAG, "byte = " + bytes);
-                        String tmp = new String(buffer, 0, bytes);
-                        Log.d(TAG,tmp);
-                        sensorData = tmp.split(",");
-                        tempText.setText(sensorData[0] + "℃");
-                        humText.setText(sensorData[1] + "%");
-                        dustText.setText(sensorData[2] + "㎍/㎥");
-                        if(sensorData[3].equals("1") && detectModeActive == true) {
-                            detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.oval));
-                            detectModeActive =false;
-                            showNotify();
-                        }
-                    } catch (IOException e) {
-                        StringWriter stringWriter = new StringWriter();
-                        e.printStackTrace(new PrintWriter(stringWriter));
-                        Log.d(TAG,stringWriter.toString());
-                    }
-                }
-            }
-        });
-        thread.start();
-        // tcp 소켓 통신 수신 쓰레드
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG,"onBackPressed");
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     public void turnOn() throws IOException {
@@ -209,28 +253,29 @@ public class MainActivity extends AppCompatActivity {
         byte[] inst = "Off".getBytes();
         dataOutputStream.write(inst);
     }
-    public void showNotify() {
+    public void showDetectNotify() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default");
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0, new Intent(getApplicationContext(), cctvActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        detectPendingIntent = PendingIntent.getActivity(getApplicationContext(),0, new Intent(getApplicationContext(), cctvActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setSmallIcon(R.drawable.applogo);
         builder.setContentTitle("사람이 감지되었습니다.");
         builder.setContentText("CCTV를 확인하시겠습니까?");
-        builder.setContentIntent(pendingIntent);
+        builder.setContentIntent(detectPendingIntent);
         builder.setAutoCancel(true);
 
-        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        detectNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(new NotificationChannel("default", "기본 채널", NotificationManager.IMPORTANCE_DEFAULT));
+            detectNotification.createNotificationChannel(new NotificationChannel("1", "1", NotificationManager.IMPORTANCE_HIGH));
         }
-        notificationManager.notify(1, builder.build());
+        detectNotification.notify(1, builder.build());
     }
     public void showAlarmNotify() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default");
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(),0, new Intent(getApplicationContext(), cctvActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent intent = new Intent(getApplicationContext(), notificationBroadcast.class);
+        alarmPendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setSmallIcon(R.drawable.alarm);
         builder.setContentTitle("알람");
         builder.setOngoing(true);
-        builder.setContentIntent(pendingIntent);
+        builder.setContentIntent(alarmPendingIntent);
 
         if(alarmHour > 0 && alarmHour < 12)
             builder.setContentText("설정된 알람 시간은 오전 " + alarmHour + "시 " + alarmMinute + "분입니다.");
@@ -242,11 +287,11 @@ public class MainActivity extends AppCompatActivity {
             builder.setContentText("설정된 알람 시간은 오전 " + "0시 " + alarmMinute + "분입니다.");
 
 
-        NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+        alarmNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(new NotificationChannel("default", "채널", NotificationManager.IMPORTANCE_DEFAULT));
+            alarmNotification.createNotificationChannel(new NotificationChannel("2", "2", NotificationManager.IMPORTANCE_DEFAULT));
         }
-        notificationManager.notify(0, builder.build());
+        alarmNotification.notify(2, builder.build());
         Log.d(TAG,"show Alarm notify");
     }
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -258,10 +303,22 @@ public class MainActivity extends AppCompatActivity {
         alarmCalendar.set(Calendar.SECOND, 0);
 
         if(alarmCalendar.before(Calendar.getInstance()))     alarmCalendar.add(Calendar.DATE, 1);
-
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        alarmPendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmPendingIntent);
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
+        alarmCallPendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d(TAG,"onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        Log.d(TAG,"onStop");
+        super.onStop();
     }
 }
