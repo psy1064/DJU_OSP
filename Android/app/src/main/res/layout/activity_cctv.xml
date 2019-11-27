@@ -16,15 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white">
-        <Switch
-            android:id="@+id/detectSwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="감시모드       On / Off"
-            android:textSize="20sp"
-            android:paddingLeft="40dp"
-            android:paddingRight="50dp"
-            android:layout_weight="1"/>
+
         <Button
             android:id="@+id/callText"
             android:layout_weight="1"

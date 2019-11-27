@@ -34,7 +34,6 @@ public class cctvActivity extends AppCompatActivity {
 
         webView = (WebView) findViewById(R.id.cctvWeb);
         callText = (TextView) findViewById(R.id.callText);
-        aSwitch = (Switch) findViewById(R.id.detectSwitch);
 
         webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -78,22 +77,6 @@ public class cctvActivity extends AppCompatActivity {
                 });
                 AlertDialog alertDialog = alert.create();
                 alertDialog.show();
-            }
-        });
-        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (aSwitch.isChecked() == true) {
-                    aSwitch.setText("감시모드 활성화 중");
-                    isDetectEnabled = true;
-                    flag = 1;
-                }
-                else {
-                    aSwitch.setText("감시모드 비활성화 중");
-                    isDetectEnabled = false;
-                    flag = 0;
-                }
-
             }
         });
     }

@@ -22,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -95,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setContentTitle("실내 환경 데이터");
                 builder.setContentIntent(dataPendingIntent);
                 builder.setContentText("온도 = 0 습도 = 0 미세먼지 = " );
+
                 //builder.setOngoing(true);
                 dataNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -115,25 +115,26 @@ public class MainActivity extends AppCompatActivity {
                         if(dust >= 0 && dust <=30) {
                             dustText.setTextColor(Color.BLUE);
                             dustText.setText("좋음 (" + sensorData[2] + "㎍/㎥)");
-                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 좋음 " + sensorData[2] + "㎍/㎥");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 좋음 (" + sensorData[2] + "㎍/㎥)");
                         } else if(dust >= 31 && dust <=80) {
                             dustText.setTextColor(Color.GREEN);
                             dustText.setText("보통 (" + sensorData[2] + "㎍/㎥)");
-                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 보통 " + sensorData[2] + "㎍/㎥");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 보통 (" + sensorData[2] + "㎍/㎥)");
                         } else if(dust >= 81 && dust <=150) {
                             dustText.setTextColor(Color.parseColor("#FF7F00"));
                             dustText.setText("나쁨 (" + sensorData[2] + "㎍/㎥)");
-                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 나쁨 " + sensorData[2] + "㎍/㎥");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 나쁨 (" + sensorData[2] + "㎍/㎥)");
                         } else if(dust >= 151) {
                             dustText.setTextColor(Color.RED);
                             dustText.setText("매우나쁨 (" + sensorData[2] + "㎍/㎥)");
-                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + " % 매우나쁨 " + sensorData[2] + "㎍/㎥");
+                            builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 매우나쁨 (" + sensorData[2] + "㎍/㎥)");
                         }
                         if(sensorData[3].equals("1") && detectModeActive == true) {
                             detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.oval));
                             detectModeActive =false;
                             showDetectNotify();
                         }
+                        builder.setWhen(System.currentTimeMillis());
                         dataNotification.notify(0,builder.build());
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -212,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.oval));
                     alarmManager.cancel(alarmPendingIntent);
-                    alarmNotification.cancel(0);
+                    alarmNotification.cancel(2);
                     alarmActive = false;
                 }
 
@@ -254,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         dataOutputStream.write(inst);
     }
     public void showDetectNotify() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
         detectPendingIntent = PendingIntent.getActivity(getApplicationContext(),0, new Intent(getApplicationContext(), cctvActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setSmallIcon(R.drawable.applogo);
         builder.setContentTitle("사람이 감지되었습니다.");
@@ -269,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
         detectNotification.notify(1, builder.build());
     }
     public void showAlarmNotify() {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "default");
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "2");
         Intent intent = new Intent(getApplicationContext(), notificationBroadcast.class);
         alarmPendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setSmallIcon(R.drawable.alarm);
