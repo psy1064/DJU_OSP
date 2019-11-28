@@ -23,7 +23,6 @@ public class cctvActivity extends AppCompatActivity {
     WebView webView;
     WebSettings webSettings;
     TextView callText;
-    Switch aSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

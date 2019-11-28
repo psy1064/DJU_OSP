@@ -1,15 +1,11 @@
 package my.homekeeper;
 
-import android.content.Context;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.ebanx.swipebtn.OnActiveListener;
 import com.ebanx.swipebtn.OnStateChangeListener;
 import com.ebanx.swipebtn.SwipeButton;
 
@@ -21,6 +17,7 @@ public class AlarmActivity extends AppCompatActivity {
     RelativeLayout relativeLayout;
     SwipeButton swipeButton;
     TextView timeText;
+    MediaPlayer mediaPlayer;
     boolean flag = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,18 +40,21 @@ public class AlarmActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         // 잠금 화면 위로 activity 띄워줌
 
-        /*new Thread(new Runnable() {
+        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.beep);
+        mediaPlayer.setLooping(true);
+        mediaPlayer.start();
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    ((MainActivity)MainActivity.context).turnOn();
+                    ((MainActivity)MainActivity.context).tcpThread.turnOn();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
-*/
-        new Thread(new Runnable() {
+
+        final Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (flag == true) {
@@ -73,18 +73,15 @@ public class AlarmActivity extends AppCompatActivity {
                     } catch (InterruptedException ex) {}
                 }
             }
-        }).start();
+        });
+        thread.start();
 
         swipeButton.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
             public void onStateChange(boolean active) {
-                Toast.makeText(getApplicationContext(),"종료하였습니다.",Toast.LENGTH_LONG).show();
-            }
-        });
-        swipeButton.setOnActiveListener(new OnActiveListener() {
-            @Override
-            public void onActive() {
-                Toast.makeText(getApplicationContext(),"종료하였습니다.",Toast.LENGTH_LONG).show();
+                mediaPlayer.stop();
+                flag=false;
+                finish();
             }
         });
     }
