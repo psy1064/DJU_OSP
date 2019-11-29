@@ -115,20 +115,15 @@
 
     <TextView
         android:id="@+id/lightText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
         android:layout_below="@+id/lightButton"
-        android:layout_alignStart="@+id/lightButton"
-        android:layout_alignLeft="@+id/lightButton"
         android:layout_alignEnd="@+id/lightButton"
         android:layout_alignRight="@+id/lightButton"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
+        android:background="@drawable/shape_button"
         android:gravity="center"
-        android:text="전등On/Off" />
+        android:text="전등 On/Off" />
 
     <ImageButton
         android:id="@+id/alarmButton"
@@ -146,20 +141,19 @@
 
     <TextView
         android:id="@+id/alarmtText"
-        android:layout_width="72dp"
-        android:layout_height="wrap_content"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
         android:layout_below="@+id/alarmButton"
-        android:layout_alignStart="@+id/alarmButton"
-        android:layout_alignLeft="@+id/alarmButton"
+
         android:layout_alignEnd="@+id/alarmButton"
         android:layout_alignRight="@+id/alarmButton"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginRight="3dp"
+
+        android:background="@drawable/shape_button"
         android:gravity="center"
-        android:text="알람On/Off" />
+        android:text="알람 On/Off" />
 
     <ImageButton
         android:id="@+id/cctvButton"
@@ -176,20 +170,16 @@
 
     <TextView
         android:id="@+id/cctvText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
         android:layout_below="@+id/cctvButton"
-        android:layout_alignStart="@+id/cctvButton"
-        android:layout_alignLeft="@+id/cctvButton"
         android:layout_alignEnd="@+id/cctvButton"
         android:layout_alignRight="@+id/cctvButton"
-        android:layout_marginStart="14dp"
-        android:layout_marginLeft="14dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
+
+        android:background="@drawable/shape_button"
         android:gravity="center"
-        android:text="cctv확인" />
+        android:text="CCTV 확인" />
 
     <ImageButton
         android:id="@+id/detectModeButton"
@@ -206,18 +196,14 @@
 
     <TextView
         android:id="@+id/detectModeText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
         android:layout_below="@+id/detectModeButton"
-        android:layout_alignStart="@+id/detectModeButton"
-        android:layout_alignLeft="@+id/detectModeButton"
         android:layout_alignEnd="@+id/detectModeButton"
         android:layout_alignRight="@+id/detectModeButton"
-        android:layout_marginStart="14dp"
-        android:layout_marginLeft="14dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="14dp"
-        android:layout_marginRight="14dp"
+
+        android:background="@drawable/shape_button"
         android:gravity="center"
         android:text="감시모드" />
 

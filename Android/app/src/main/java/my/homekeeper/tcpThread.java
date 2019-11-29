@@ -1,22 +1,11 @@
 package my.homekeeper;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.os.Build;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 public class tcpThread extends Thread{
     public InputStream dataInputStream;
@@ -62,6 +51,14 @@ public class tcpThread extends Thread{
     }
     public void turnOff() throws IOException {
         byte[] inst = "Off".getBytes();
+        dataOutputStream.write(inst);
+    }
+    public void cctvOn() throws IOException {
+        byte[] inst = "cctvOn".getBytes();
+        dataOutputStream.write(inst);
+    }
+    public void cctvOff() throws IOException {
+        byte[] inst = "cctvOff".getBytes();
         dataOutputStream.write(inst);
     }
 }

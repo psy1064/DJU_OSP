@@ -11,15 +11,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 public class cctvActivity extends AppCompatActivity {
     final String TAG = "TAG+CCTVFragment";
-    public boolean isDetectEnabled = false;
-    public int flag = 0;
+    Button cctvOnButton, cctvOffButton;
     WebView webView;
     WebSettings webSettings;
     TextView callText;
@@ -33,6 +35,8 @@ public class cctvActivity extends AppCompatActivity {
 
         webView = (WebView) findViewById(R.id.cctvWeb);
         callText = (TextView) findViewById(R.id.callText);
+        cctvOnButton = (Button) findViewById(R.id.cctvOnButton);
+        cctvOffButton = (Button) findViewById(R.id.cctvOffButton);
 
         webSettings = webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -58,24 +62,55 @@ public class cctvActivity extends AppCompatActivity {
         callText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getApplicationContext());
-                alert.setTitle("신고");
-                alert.setMessage("신고하시겠습니까?");
-                alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(cctvActivity.this);
+                builder.setTitle("신고");
+                builder.setMessage("신고하시겠습니까?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:112"));
                         startActivity(intent);
                     }
                 });
-                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
                     }
                 });
-                AlertDialog alertDialog = alert.create();
+                AlertDialog alertDialog = builder.create();
                 alertDialog.show();
+            }
+        });
+
+        cctvOnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ((MainActivity)MainActivity.context).tcpThread.cctvOn();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+            }
+        });
+        cctvOffButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ((MainActivity)MainActivity.context).tcpThread.cctvOff();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
             }
         });
     }

@@ -24,24 +24,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.Socket;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     final String TAG = "TAG+MainActivity";
-
-    /*public InputStream dataInputStream;
-    public OutputStream dataOutputStream;
-    private Socket socket;
-    private String ip = "121.153.150.157";
-    private int port = 9999;*/
-
-    String sensorData[] = {"0","0","0","0"};
-
+    String sensorData[] = {"0", "0", "0", "0"};
     tcpThread tcpThread;
 
     TextView dustText, tempText, humText;
@@ -52,10 +42,11 @@ public class MainActivity extends AppCompatActivity {
     Intent alarmIntent;
     PendingIntent alarmPendingIntent, alarmCallPendingIntent, detectPendingIntent, dataPendingIntent;
     NotificationManager alarmNotification, detectNotification, dataNotification;
-    int alarmHour=0, alarmMinute=0;
+    int alarmHour = 0, alarmMinute = 0;
     Calendar alarmCalendar;
 
     public static Context context;
+
     @Override
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,24 +62,25 @@ public class MainActivity extends AppCompatActivity {
         alarmButton = (ImageButton) findViewById(R.id.alarmButton);
         detectModeButton = (ImageButton) findViewById(R.id.detectModeButton);
 
-        if(detectModeActive == true) detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
-        if(alarmActive == true) alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
+        if (detectModeActive == true)
+            detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
+        if (alarmActive == true)
+            alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
 
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
         Intent intent = new Intent(getApplicationContext(), notificationBroadcast.class);
-        dataPendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        dataPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         builder.setSmallIcon(R.drawable.applogo);
         builder.setContentTitle("실내 환경 데이터");
         builder.setContentIntent(dataPendingIntent);
-        builder.setContentText("온도 = 0 습도 = 0 미세먼지 = " );
-        builder.setOngoing(true);
+        builder.setContentText("온도 = 0 습도 = 0 미세먼지 = ");
         dataNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             dataNotification.createNotificationChannel(new NotificationChannel("default", "채널", NotificationManager.IMPORTANCE_LOW));
         }
-        dataNotification.notify(0,builder.build());
+        dataNotification.notify(0, builder.build());
 
         Handler handler = new Handler() {
             @Override
@@ -99,30 +91,30 @@ public class MainActivity extends AppCompatActivity {
                 tempText.setText(sensorData[0] + " ℃");
                 humText.setText(sensorData[1] + " %");
                 int dust = Integer.parseInt(sensorData[2]);
-                if(dust >= 0 && dust <=30) {
+                if (dust >= 0 && dust <= 30) {
                     dustText.setTextColor(Color.BLUE);
                     dustText.setText("좋음 (" + sensorData[2] + "㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 좋음 (" + sensorData[2] + "㎍/㎥)");
-                } else if(dust >= 31 && dust <=80) {
+                } else if (dust >= 31 && dust <= 80) {
                     dustText.setTextColor(Color.GREEN);
                     dustText.setText("보통 (" + sensorData[2] + "㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 보통 (" + sensorData[2] + "㎍/㎥)");
-                } else if(dust >= 81 && dust <=150) {
+                } else if (dust >= 81 && dust <= 150) {
                     dustText.setTextColor(Color.parseColor("#FF7F00"));
                     dustText.setText("나쁨 (" + sensorData[2] + "㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 나쁨 (" + sensorData[2] + "㎍/㎥)");
-                } else if(dust >= 151) {
+                } else if (dust >= 151) {
                     dustText.setTextColor(Color.RED);
                     dustText.setText("매우나쁨 (" + sensorData[2] + "㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 매우나쁨 (" + sensorData[2] + "㎍/㎥)");
                 }
-                if(sensorData[3].equals("1") && detectModeActive == true) {
-                    detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.oval));
-                    detectModeActive =false;
+                if (sensorData[3].equals("1") && detectModeActive == true) {
+                    detectModeButton.setBackgroundResource(R.drawable.activeoval);
+                    detectModeActive = false;
                     showDetectNotify();
                 }
                 builder.setWhen(System.currentTimeMillis());
-                dataNotification.notify(0,builder.build());
+                dataNotification.notify(0, builder.build());
             }
         };
 
@@ -179,8 +171,8 @@ public class MainActivity extends AppCompatActivity {
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!alarmActive) {
-                    TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT,new TimePickerDialog.OnTimeSetListener() {
+                if (!alarmActive) {
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, new TimePickerDialog.OnTimeSetListener() {
                         @RequiresApi(api = Build.VERSION_CODES.M)
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -188,54 +180,46 @@ public class MainActivity extends AppCompatActivity {
                             alarmMinute = minute;
                             showAlarmNotify();
                             setAlarm();
-                            alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.activeoval));
+                            alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
                             alarmActive = true;
                         }
-                    },alarmHour, alarmMinute, false);
+                    }, alarmHour, alarmMinute, false);
                     timePickerDialog.show();
-
-
                 } else {
-                    alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this,R.drawable.oval));
+                    alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.oval));
                     alarmManager.cancel(alarmPendingIntent);
                     alarmNotification.cancel(2);
                     alarmActive = false;
                 }
-
             }
-
         });
         detectModeButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                if(!detectModeActive) {
+                if (!detectModeActive) {
                     detectModeActive = true;
                     detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
-                    Toast.makeText(getApplicationContext(),"감시모드가 활성화되었습니다.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "감시모드가 활성화되었습니다.", Toast.LENGTH_LONG).show();
                 } else {
                     detectModeActive = false;
                     detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.oval));
                 }
             }
         });
-
     }
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG,"onBackPressed");
+        Log.d(TAG, "onBackPressed");
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }
 
-
-
     public void showDetectNotify() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
-        detectPendingIntent = PendingIntent.getActivity(getApplicationContext(),0, new Intent(getApplicationContext(), cctvActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
+        detectPendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), cctvActivity.class), PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setSmallIcon(R.drawable.applogo);
         builder.setContentTitle("사람이 감지되었습니다.");
         builder.setContentText("CCTV를 확인하시겠습니까?");
@@ -248,41 +232,42 @@ public class MainActivity extends AppCompatActivity {
         }
         detectNotification.notify(1, builder.build());
     }
+
     public void showAlarmNotify() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "2");
         Intent intent = new Intent(getApplicationContext(), notificationBroadcast.class);
-        alarmPendingIntent = PendingIntent.getBroadcast(getApplicationContext(),0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setSmallIcon(R.drawable.alarm);
         builder.setContentTitle("알람");
         builder.setOngoing(true);
         builder.setContentIntent(alarmPendingIntent);
 
-        if(alarmHour > 0 && alarmHour < 12)
+        if (alarmHour > 0 && alarmHour < 12)
             builder.setContentText("설정된 알람 시간은 오전 " + alarmHour + "시 " + alarmMinute + "분입니다.");
-        else if(alarmHour == 12)
+        else if (alarmHour == 12)
             builder.setContentText("설정된 알람 시간은 오후 " + alarmHour + "시 " + alarmMinute + "분입니다.");
-        else if(alarmHour > 12 && alarmHour <24)
-            builder.setContentText("설정된 알람 시간은 오후 " + (alarmHour-12) + "시 " + alarmMinute + "분입니다.");
-        else if(alarmHour == 0)
+        else if (alarmHour > 12 && alarmHour < 24)
+            builder.setContentText("설정된 알람 시간은 오후 " + (alarmHour - 12) + "시 " + alarmMinute + "분입니다.");
+        else if (alarmHour == 0)
             builder.setContentText("설정된 알람 시간은 오전 " + "0시 " + alarmMinute + "분입니다.");
-
 
         alarmNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             alarmNotification.createNotificationChannel(new NotificationChannel("2", "2", NotificationManager.IMPORTANCE_DEFAULT));
         }
         alarmNotification.notify(2, builder.build());
-        Log.d(TAG,"show Alarm notify");
+        Log.d(TAG, "show Alarm notify");
     }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setAlarm() {
         alarmCalendar = Calendar.getInstance();
         alarmCalendar.setTimeInMillis(System.currentTimeMillis());
-        alarmCalendar.set(Calendar.HOUR_OF_DAY,alarmHour);
+        alarmCalendar.set(Calendar.HOUR_OF_DAY, alarmHour);
         alarmCalendar.set(Calendar.MINUTE, alarmMinute);
         alarmCalendar.set(Calendar.SECOND, 0);
 
-        if(alarmCalendar.before(Calendar.getInstance()))     alarmCalendar.add(Calendar.DATE, 1);
+        if (alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE, 1);
         alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
@@ -292,13 +277,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Log.d(TAG,"onDestroy");
+        Log.d(TAG, "onDestroy");
         super.onDestroy();
     }
 
     @Override
     protected void onStop() {
-        Log.d(TAG,"onStop");
+        Log.d(TAG, "onStop");
         super.onStop();
     }
 }
