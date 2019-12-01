@@ -12,18 +12,18 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
+#include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
-#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
 class Ui_Dialog
 {
 public:
-    QWidget *verticalLayoutWidget_2;
+    QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
     QHBoxLayout *horizontalLayout_3;
     QLabel *dateValue;
@@ -40,28 +40,31 @@ public:
     QVBoxLayout *verticalLayout;
     QPushButton *onButton;
     QPushButton *offButton;
-    QLabel *isConnectedValue;
 
     void setupUi(QDialog *Dialog)
     {
         if (Dialog->objectName().isEmpty())
             Dialog->setObjectName(QStringLiteral("Dialog"));
-        Dialog->resize(402, 273);
+        Dialog->resize(1121, 515);
+        QSizePolicy sizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(Dialog->sizePolicy().hasHeightForWidth());
+        Dialog->setSizePolicy(sizePolicy);
         Dialog->setAutoFillBackground(false);
         Dialog->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
-        verticalLayoutWidget_2 = new QWidget(Dialog);
-        verticalLayoutWidget_2->setObjectName(QStringLiteral("verticalLayoutWidget_2"));
-        verticalLayoutWidget_2->setGeometry(QRect(0, 30, 401, 241));
-        verticalLayout_2 = new QVBoxLayout(verticalLayoutWidget_2);
+        gridLayout = new QGridLayout(Dialog);
+        gridLayout->setObjectName(QStringLiteral("gridLayout"));
+        verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setSpacing(0);
         verticalLayout_2->setObjectName(QStringLiteral("verticalLayout_2"));
-        verticalLayout_2->setContentsMargins(0, 0, 0, 0);
+        verticalLayout_2->setSizeConstraint(QLayout::SetMaximumSize);
         horizontalLayout_3 = new QHBoxLayout();
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
-        dateValue = new QLabel(verticalLayoutWidget_2);
+        dateValue = new QLabel(Dialog);
         dateValue->setObjectName(QStringLiteral("dateValue"));
         QFont font;
-        font.setPointSize(22);
+        font.setPointSize(72);
         font.setBold(true);
         font.setWeight(75);
         dateValue->setFont(font);
@@ -69,7 +72,7 @@ public:
 
         horizontalLayout_3->addWidget(dateValue);
 
-        timeValue = new QLabel(verticalLayoutWidget_2);
+        timeValue = new QLabel(Dialog);
         timeValue->setObjectName(QStringLiteral("timeValue"));
         timeValue->setFont(font);
         timeValue->setAlignment(Qt::AlignCenter);
@@ -82,22 +85,22 @@ public:
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setSpacing(0);
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
-        tempIcon = new QLabel(verticalLayoutWidget_2);
+        tempIcon = new QLabel(Dialog);
         tempIcon->setObjectName(QStringLiteral("tempIcon"));
 
         horizontalLayout->addWidget(tempIcon);
 
-        humIcon = new QLabel(verticalLayoutWidget_2);
+        humIcon = new QLabel(Dialog);
         humIcon->setObjectName(QStringLiteral("humIcon"));
 
         horizontalLayout->addWidget(humIcon);
 
-        dustIcon = new QLabel(verticalLayoutWidget_2);
+        dustIcon = new QLabel(Dialog);
         dustIcon->setObjectName(QStringLiteral("dustIcon"));
 
         horizontalLayout->addWidget(dustIcon);
 
-        lightIcon = new QLabel(verticalLayoutWidget_2);
+        lightIcon = new QLabel(Dialog);
         lightIcon->setObjectName(QStringLiteral("lightIcon"));
 
         horizontalLayout->addWidget(lightIcon);
@@ -108,17 +111,17 @@ public:
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setSpacing(0);
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
-        tempValue = new QLabel(verticalLayoutWidget_2);
+        tempValue = new QLabel(Dialog);
         tempValue->setObjectName(QStringLiteral("tempValue"));
 
         horizontalLayout_2->addWidget(tempValue);
 
-        humValue = new QLabel(verticalLayoutWidget_2);
+        humValue = new QLabel(Dialog);
         humValue->setObjectName(QStringLiteral("humValue"));
 
         horizontalLayout_2->addWidget(humValue);
 
-        dustValue = new QLabel(verticalLayoutWidget_2);
+        dustValue = new QLabel(Dialog);
         dustValue->setObjectName(QStringLiteral("dustValue"));
         dustValue->setScaledContents(false);
 
@@ -128,15 +131,15 @@ public:
         verticalLayout->setSpacing(5);
         verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        onButton = new QPushButton(verticalLayoutWidget_2);
+        onButton = new QPushButton(Dialog);
         onButton->setObjectName(QStringLiteral("onButton"));
-        QSizePolicy sizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy.setHorizontalStretch(0);
-        sizePolicy.setVerticalStretch(0);
-        sizePolicy.setHeightForWidth(onButton->sizePolicy().hasHeightForWidth());
-        onButton->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(onButton->sizePolicy().hasHeightForWidth());
+        onButton->setSizePolicy(sizePolicy1);
         QFont font1;
-        font1.setPointSize(12);
+        font1.setPointSize(36);
         font1.setBold(true);
         font1.setItalic(false);
         font1.setWeight(75);
@@ -148,10 +151,10 @@ public:
 
         verticalLayout->addWidget(onButton);
 
-        offButton = new QPushButton(verticalLayoutWidget_2);
+        offButton = new QPushButton(Dialog);
         offButton->setObjectName(QStringLiteral("offButton"));
-        sizePolicy.setHeightForWidth(offButton->sizePolicy().hasHeightForWidth());
-        offButton->setSizePolicy(sizePolicy);
+        sizePolicy1.setHeightForWidth(offButton->sizePolicy().hasHeightForWidth());
+        offButton->setSizePolicy(sizePolicy1);
         offButton->setFont(font1);
         offButton->setStyleSheet(QStringLiteral("background:rgb(255,255,255)"));
 
@@ -163,9 +166,9 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_2);
 
-        isConnectedValue = new QLabel(Dialog);
-        isConnectedValue->setObjectName(QStringLiteral("isConnectedValue"));
-        isConnectedValue->setGeometry(QRect(7, 0, 381, 22));
+
+        gridLayout->addLayout(verticalLayout_2, 0, 0, 1, 1);
+
 
         retranslateUi(Dialog);
 
@@ -186,7 +189,6 @@ public:
         dustValue->setText(QApplication::translate("Dialog", "<html><head/><body><p align=\"center\">dust</p></body></html>", nullptr));
         onButton->setText(QApplication::translate("Dialog", "on", nullptr));
         offButton->setText(QApplication::translate("Dialog", "off", nullptr));
-        isConnectedValue->setText(QApplication::translate("Dialog", "TextLabel", nullptr));
     } // retranslateUi
 
 };

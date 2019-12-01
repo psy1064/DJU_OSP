@@ -23,6 +23,10 @@ PROCESS::PROCESS()
 
     atexit(call_exitfunc);			// 시스템 종료 시 호출되는 함수 선언
 }
+PROCESS::~PROCESS()
+{
+    system("sudo killall -15 motion");
+}
 void PROCESS::processCycle()
 {
     cout << "count = " << ++count << endl;

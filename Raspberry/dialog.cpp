@@ -58,7 +58,7 @@ Dialog::Dialog(QWidget *parent) :
     timer = new QTimer(this);	// 화면에 시간을 표시할 타이머 설정
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));	// 설정한 시간마다 showTime() 실행
     showTime();	// 처음 한번 현재 시간 출력
-    timer->start(1000);	// 1초 간격으로 timer 동작
+    timer->start(1000);	// 0.5초 간격으로 timer 동작
 }
 void Dialog::showValue(int temp, int hum, int dust)
 {
@@ -110,10 +110,9 @@ void Dialog::showTime()
     QString dateText;
     QString timeText;
 
-    dateText = date.toString("  yyyy-MM-dd");	// 2019-11-15 형식으로 출력
-    if(time.second()%2==0)  timeText = time.toString("hh:mm:ss");
-    else                    timeText = time.toString("hh mm ss");
-    // 2초마다 한번 씩 ':' 깜빡임
+    dateText = date.toString("yyyy-MM-dd");	// 2019-11-15 형식으로 출력
+    timeText = time.toString("AP hh : mm : ss");
+
     ui->dateValue->setText(dateText);
     ui->timeValue->setText(timeText);
 } // 화면에 현재 날짜 시간 출력
@@ -145,15 +144,17 @@ void Dialog::tcpInit()
 void Dialog::newConnection()
 {
     std::cout << "connected" << con << std::endl;
-    if(con == 0)
+
+    if(con!=0)
     {
-        client = tcpServer->nextPendingConnection();
-        con++;
-        connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
-        connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
-        connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
-        disconnect(tcpServer, SIGNAL(newConnection()),this,SLOT(newConnection()));
-    }
+        client->close();
+        con--;
+    } // 접속되어 있던 소켓 연결 해
+    client = tcpServer->nextPendingConnection();
+    con++;
+    connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
+    connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
+    connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
 } // 서버에 소켓이 접속했을 때 실행
 void Dialog::sendValue(int temp, int hum, int dust,int human)
 {
@@ -173,6 +174,8 @@ void Dialog::readData()
         QByteArray data = client->readAll();
         if(data.toStdString() == "On")          on_onButton_clicked();
         else if(data.toStdString() == "Off")    on_offButton_clicked();
+        else if(data.toStdString() == "cctvOn")    system("sudo motion");
+        else if(data.toStdString() == "cctvOff")   system("sudo killall -15 motion");
     }
 } // 데이터 수신 함수
 void Dialog::disConnected()
@@ -182,6 +185,4 @@ void Dialog::disConnected()
     --con;
 
     disconnect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
-    if(con==0)
-        connect(tcpServer,SIGNAL(newConnection()),this,SLOT(newConnection()));
 } // 소켓 연결 해제

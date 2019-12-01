@@ -12,6 +12,7 @@ private:
     int count;
 public:
 	PROCESS();
+    ~PROCESS();
 	void processCycle();
 	void printData();
     void putData(int* temp, int* hum, int* dust, int* human);
