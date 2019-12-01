@@ -2,25 +2,209 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@drawable/sky2">
+    android:background="@drawable/sky2"
+    tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="?attr/actionBarSize"/>
 
-    <android.support.design.widget.BottomNavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
-        app:menu="@menu/bottom_nav_menu" />
+    <TextView
+        android:id="@+id/dustText"
+        android:layout_width="389dp"
+        android:layout_height="117dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="43dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/rect"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="@android:color/black"
+        android:textSize="30sp" />
 
+    <TextView
+        android:id="@+id/tempText"
+        android:layout_width="389dp"
+        android:layout_height="117dp"
+        android:layout_below="@+id/humText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/rect"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="@android:color/black"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/humText"
+        android:layout_width="389dp"
+        android:layout_height="117dp"
+        android:layout_below="@+id/dustText"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginRight="12dp"
+        android:background="@drawable/rect"
+        android:gravity="center"
+        android:text="-"
+        android:textColor="@android:color/black"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/dustLogo"
+        android:src="@drawable/dust"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignStart="@+id/dustText"
+        android:layout_alignLeft="@+id/dustText"
+        android:layout_alignTop="@+id/dustText"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="29dp" />
+
+    <ImageView
+        android:id="@+id/tempLogo"
+        android:src="@drawable/temperature"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignStart="@+id/dustText"
+        android:layout_alignLeft="@+id/dustText"
+        android:layout_alignTop="@+id/tempText"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="28dp" />
+
+    <ImageView
+        android:id="@+id/humLogo"
+        android:src="@drawable/hum"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignStart="@+id/humText"
+        android:layout_alignLeft="@+id/humText"
+        android:layout_alignTop="@+id/humText"
+        android:layout_marginStart="14dp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="29dp" />
+
+    <ImageButton
+        android:id="@+id/lightButton"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="73dp"
+        android:layout_marginLeft="73dp"
+        android:layout_marginTop="457dp"
+        android:background="@drawable/oval"
+        android:src="@drawable/tungsten" />
+
+    <TextView
+        android:id="@+id/lightText"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/lightButton"
+        android:layout_alignEnd="@+id/lightButton"
+        android:layout_alignRight="@+id/lightButton"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/shape_button"
+        android:gravity="center"
+        android:text="전등 On/Off" />
+
+    <ImageButton
+        android:id="@+id/alarmButton"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_below="@+id/lightText"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_marginStart="73dp"
+        android:layout_marginLeft="73dp"
+        android:layout_marginTop="25dp"
+        android:layout_marginBottom="0dp"
+        android:background="@drawable/oval"
+        android:src="@drawable/alarm" />
+
+    <TextView
+        android:id="@+id/alarmtText"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/alarmButton"
+
+        android:layout_alignEnd="@+id/alarmButton"
+        android:layout_alignRight="@+id/alarmButton"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+
+        android:background="@drawable/shape_button"
+        android:gravity="center"
+        android:text="알람 On/Off" />
+
+    <ImageButton
+        android:id="@+id/cctvButton"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="457dp"
+        android:layout_marginEnd="73dp"
+        android:layout_marginRight="73dp"
+        android:background="@drawable/oval"
+        android:src="@drawable/policeman" />
+
+    <TextView
+        android:id="@+id/cctvText"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/cctvButton"
+        android:layout_alignEnd="@+id/cctvButton"
+        android:layout_alignRight="@+id/cctvButton"
+        android:layout_marginTop="16dp"
+
+        android:background="@drawable/shape_button"
+        android:gravity="center"
+        android:text="CCTV 확인" />
+
+    <ImageButton
+        android:id="@+id/detectModeButton"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_below="@+id/cctvText"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="73dp"
+        android:layout_marginRight="73dp"
+        android:background="@drawable/oval"
+        android:src="@drawable/binoculars" />
+
+    <TextView
+        android:id="@+id/detectModeText"
+        android:layout_width="85dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/detectModeButton"
+        android:layout_alignEnd="@+id/detectModeButton"
+        android:layout_alignRight="@+id/detectModeButton"
+        android:layout_marginTop="16dp"
+
+        android:background="@drawable/shape_button"
+        android:gravity="center"
+        android:text="감시모드" />
 
 </RelativeLayout>

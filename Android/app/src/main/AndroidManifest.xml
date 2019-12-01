@@ -3,6 +3,7 @@
     package="my.homekeeper">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.REORDER_TASKS" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +13,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <service
+            android:name=".AlarmService"
+            android:enabled="true"
+            android:exported="true" />
+        <receiver android:name=".AlarmReceiver" />
+        <receiver android:name=".notificationBroadcast"/>
+        <activity android:name=".AlarmActivity"/>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name" />
+        <activity android:name=".cctvActivity" />
         <activity android:name=".loadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,11 +31,5 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
     </application>
-
 </manifest>
