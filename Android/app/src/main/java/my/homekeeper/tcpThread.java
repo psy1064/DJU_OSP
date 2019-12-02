@@ -11,7 +11,7 @@ public class tcpThread extends Thread{
     public InputStream dataInputStream;
     public OutputStream dataOutputStream;
     private Socket socket;
-    private String ip = "121.153.150.157";
+    public String ip = "121.153.150.157";
     private int port = 9999;
     final String TAG = "TAG+Thread";
     Handler handler;
@@ -31,13 +31,16 @@ public class tcpThread extends Thread{
         }
         byte[] buffer = new byte[1024];
         int bytes;
+        String tmp = "";
         Log.d(TAG, "수신 시작");
         while(true) {
             try {
                 Log.d(TAG, "수신 대기");
                 bytes = dataInputStream.read(buffer);
                 Log.d(TAG, "byte = " + bytes);
-                String tmp = new String(buffer, 0, bytes);
+                if(bytes > 0) {
+                    tmp = new String(buffer, 0, bytes);
+                }
                 Log.d(TAG,tmp);
                 handler.obtainMessage(0,tmp).sendToTarget();
             } catch (IOException e) {

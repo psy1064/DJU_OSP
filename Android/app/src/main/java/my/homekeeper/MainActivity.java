@@ -31,7 +31,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity {
 
     final String TAG = "TAG+MainActivity";
-    String sensorData[] = {"0", "0", "0", "0"};
+    String[] sensorData = {"0", "0", "0", "0"};
     tcpThread tcpThread;
 
     TextView dustText, tempText, humText;
@@ -62,11 +62,8 @@ public class MainActivity extends AppCompatActivity {
         alarmButton = (ImageButton) findViewById(R.id.alarmButton);
         detectModeButton = (ImageButton) findViewById(R.id.detectModeButton);
 
-        if (detectModeActive == true)
-            detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
-        if (alarmActive == true)
-            alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
-
+        if (detectModeActive)   detectModeButton.setBackgroundResource(R.drawable.activeoval);
+        if (alarmActive)        alarmButton.setBackgroundResource(R.drawable.activeoval);
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
         Intent intent = new Intent(getApplicationContext(), notificationBroadcast.class);
@@ -82,10 +79,9 @@ public class MainActivity extends AppCompatActivity {
         }
         dataNotification.notify(0, builder.build());
 
-        Handler handler = new Handler() {
+        Handler handler = new Handler(new Handler.Callback() {
             @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
+            public boolean handleMessage(Message msg) {
                 String tmp = msg.obj.toString();
                 sensorData = tmp.split(",");
                 tempText.setText(sensorData[0] + " ℃");
@@ -93,30 +89,31 @@ public class MainActivity extends AppCompatActivity {
                 int dust = Integer.parseInt(sensorData[2]);
                 if (dust >= 0 && dust <= 30) {
                     dustText.setTextColor(Color.BLUE);
-                    dustText.setText("좋음 (" + sensorData[2] + "㎍/㎥)");
+                    dustText.setText("좋음 \n(" + sensorData[2] + " ㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 좋음 (" + sensorData[2] + "㎍/㎥)");
                 } else if (dust >= 31 && dust <= 80) {
                     dustText.setTextColor(Color.GREEN);
-                    dustText.setText("보통 (" + sensorData[2] + "㎍/㎥)");
+                    dustText.setText("보통 \n(" + sensorData[2] + " ㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 보통 (" + sensorData[2] + "㎍/㎥)");
                 } else if (dust >= 81 && dust <= 150) {
                     dustText.setTextColor(Color.parseColor("#FF7F00"));
-                    dustText.setText("나쁨 (" + sensorData[2] + "㎍/㎥)");
+                    dustText.setText("나쁨 \n(" + sensorData[2] + " ㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 나쁨 (" + sensorData[2] + "㎍/㎥)");
                 } else if (dust >= 151) {
                     dustText.setTextColor(Color.RED);
-                    dustText.setText("매우나쁨 (" + sensorData[2] + "㎍/㎥)");
+                    dustText.setText("매우나쁨 \n(" + sensorData[2] + " ㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 매우나쁨 (" + sensorData[2] + "㎍/㎥)");
                 }
                 if (sensorData[3].equals("1") && detectModeActive == true) {
-                    detectModeButton.setBackgroundResource(R.drawable.activeoval);
+                    detectModeButton.setBackgroundResource(R.drawable.oval);
                     detectModeActive = false;
                     showDetectNotify();
                 }
                 builder.setWhen(System.currentTimeMillis());
                 dataNotification.notify(0, builder.build());
+                return false;
             }
-        };
+        });
 
         tcpThread = new tcpThread(handler);
         tcpThread.start();
@@ -171,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!alarmActive) {
+                if (alarmActive==false) {
                     TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, new TimePickerDialog.OnTimeSetListener() {
                         @RequiresApi(api = Build.VERSION_CODES.M)
                         @Override
@@ -196,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         detectModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!detectModeActive) {
+                if (detectModeActive==false) {
                     detectModeActive = true;
                     detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
                     Toast.makeText(getApplicationContext(), "감시모드가 활성화되었습니다.", Toast.LENGTH_LONG).show();
