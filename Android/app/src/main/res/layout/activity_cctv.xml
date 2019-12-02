@@ -36,13 +36,17 @@
                 android:id="@+id/cctvOnButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="ON"
+                android:background="#FFFFFF"
                 android:layout_weight="2"/>
             <Button
                 android:id="@+id/cctvOffButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
                 android:text="OFF"
+                android:background="#FFFFFF"
                 android:layout_weight="2"/>
         </LinearLayout>
         <Button

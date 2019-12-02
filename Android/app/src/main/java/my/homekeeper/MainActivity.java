@@ -63,9 +63,13 @@ public class MainActivity extends AppCompatActivity {
         detectModeButton = (ImageButton) findViewById(R.id.detectModeButton);
 
         if (detectModeActive == true)
-            detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
+            detectModeButton.setBackgroundResource(R.drawable.activeoval);
+        else
+            detectModeButton.setBackgroundResource(R.drawable.oval);
         if (alarmActive == true)
-            alarmButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
+            alarmButton.setBackgroundResource(R.drawable.activeoval);
+        else
+            alarmButton.setBackgroundResource(R.drawable.oval);
 
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 매우나쁨 (" + sensorData[2] + "㎍/㎥)");
                 }
                 if (sensorData[3].equals("1") && detectModeActive == true) {
-                    detectModeButton.setBackgroundResource(R.drawable.activeoval);
+                    detectModeButton.setBackgroundResource(R.drawable.oval);
                     detectModeActive = false;
                     showDetectNotify();
                 }
@@ -171,7 +175,7 @@ public class MainActivity extends AppCompatActivity {
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!alarmActive) {
+                if (alarmActive==false) {
                     TimePickerDialog timePickerDialog = new TimePickerDialog(MainActivity.this, TimePickerDialog.THEME_DEVICE_DEFAULT_LIGHT, new TimePickerDialog.OnTimeSetListener() {
                         @RequiresApi(api = Build.VERSION_CODES.M)
                         @Override
@@ -196,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         detectModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!detectModeActive) {
+                if (detectModeActive==false) {
                     detectModeActive = true;
                     detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.activeoval));
                     Toast.makeText(getApplicationContext(), "감시모드가 활성화되었습니다.", Toast.LENGTH_LONG).show();

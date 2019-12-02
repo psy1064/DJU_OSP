@@ -28,6 +28,8 @@ public class AlarmActivity extends AppCompatActivity {
         swipeButton = (SwipeButton) findViewById(R.id.swipe_btn);
         timeText = (TextView) findViewById(R.id.time);
 
+        ((MainActivity)MainActivity.context).alarmActive = false;
+
         if(calendar.HOUR >= 6 && calendar.HOUR <18) {
             relativeLayout.setBackgroundResource(R.drawable.back_sky);
         } else {
