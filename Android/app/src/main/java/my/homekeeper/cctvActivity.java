@@ -1,5 +1,6 @@
 package my.homekeeper;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,7 @@ public class cctvActivity extends AppCompatActivity {
     WebSettings webSettings;
     TextView callText;
 
+    @SuppressLint({"ClickableViewAccessibility", "SetJavaScriptEnabled"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,17 +45,14 @@ public class cctvActivity extends AppCompatActivity {
 
         webView.loadData("<html><head><style type='text/css'>body{margin:auto auto;text-align:center;} " +
                         "img{width:100%25;} div{overflow: hidden;} </style></head>" +
-                        "<body><div><img src='http://121.153.150.157:8082/'/></div></body></html>",
+                        "<body><div><img src='http://" + ((MainActivity)MainActivity.context).tcpThread.ip + ":8082/'/></div></body></html>",
                 "text/html", "UTF-8");
 
         webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN : {
-                        webView.reload();
-                        break;
-                    }
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    webView.reload();
                 }
                 return true;
             }

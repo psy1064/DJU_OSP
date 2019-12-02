@@ -4,6 +4,7 @@ import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.ebanx.swipebtn.OnStateChangeListener;
@@ -18,6 +19,7 @@ public class AlarmActivity extends AppCompatActivity {
     SwipeButton swipeButton;
     TextView timeText;
     MediaPlayer mediaPlayer;
+    Button alarmButton;
     boolean flag = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,13 +30,9 @@ public class AlarmActivity extends AppCompatActivity {
         swipeButton = (SwipeButton) findViewById(R.id.swipe_btn);
         timeText = (TextView) findViewById(R.id.time);
 
-        ((MainActivity)MainActivity.context).alarmActive = false;
-
-        if(calendar.HOUR >= 6 && calendar.HOUR <18) {
-            relativeLayout.setBackgroundResource(R.drawable.back_sky);
-        } else {
-            relativeLayout.setBackgroundResource(R.drawable.back_night);
-        } // 시간에 따라 배경 이미지 변경
+        ((MainActivity)MainActivity.context).alarmButton.setBackgroundResource(R.drawable.oval);
+        ((MainActivity)MainActivity.context).alarmManager.cancel(((MainActivity)MainActivity.context).alarmPendingIntent);
+        ((MainActivity)MainActivity.context).alarmNotification.cancel(2);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -56,7 +54,7 @@ public class AlarmActivity extends AppCompatActivity {
             }
         }).start();
 
-        final Thread thread = new Thread(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 while (flag == true) {
@@ -75,8 +73,7 @@ public class AlarmActivity extends AppCompatActivity {
                     } catch (InterruptedException ex) {}
                 }
             }
-        });
-        thread.start();
+        }).start();
 
         swipeButton.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
