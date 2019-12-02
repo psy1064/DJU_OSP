@@ -12,7 +12,6 @@ unsigned char exit_flag = 0;
 
 PROCESS::PROCESS()
 {
-    count = 0;
     system("sudo motion");			// Motion 실행
     cout << "CCTV Enable" << endl;
 
@@ -29,9 +28,8 @@ PROCESS::~PROCESS()
 }
 void PROCESS::processCycle()
 {
-    cout << "count = " << ++count << endl;
     dht.DHTProcess();
-    pms.PMSReceive();    
+    pms.PMSReceive();
     printData();
 } // 데이터 수집
 void PROCESS::printData()

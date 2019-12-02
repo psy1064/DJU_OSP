@@ -9,7 +9,6 @@ class PROCESS {
 private:
 	DHT dht;
 	PMS pms;
-    int count;
 public:
 	PROCESS();
     ~PROCESS();

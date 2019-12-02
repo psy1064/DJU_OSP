@@ -40,9 +40,9 @@ Dialog::Dialog(QWidget *parent) :
     ui->humIcon->setAlignment(Qt::AlignCenter);
     ui->dustIcon->setAlignment(Qt::AlignCenter);				// 사진 가운데 정렬
 
-    ui->tempValue->setFont(QFont("FibotoLt",52));
-    ui->humValue->setFont(QFont("FibotoLt",52));
-    ui->dustValue->setFont(QFont("FibotoLt",52));	// 데이터 출력 값 폰트, 글자 크기 설정
+    ui->tempValue->setFont(QFont("FibotoLt",66));
+    ui->humValue->setFont(QFont("FibotoLt",66));
+    ui->dustValue->setFont(QFont("FibotoLt",66));	// 데이터 출력 값 폰트, 글자 크기 설정
 
     if(wiringPiSetup()==-1) exit(1);
 
@@ -58,7 +58,7 @@ Dialog::Dialog(QWidget *parent) :
     timer = new QTimer(this);	// 화면에 시간을 표시할 타이머 설정
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));	// 설정한 시간마다 showTime() 실행
     showTime();	// 처음 한번 현재 시간 출력
-    timer->start(1000);	// 0.5초 간격으로 timer 동작
+    timer->start(1000);	// 1초 간격으로 timer 동작
 }
 void Dialog::showValue(int temp, int hum, int dust)
 {
@@ -66,12 +66,28 @@ void Dialog::showValue(int temp, int hum, int dust)
     ui->tempValue->setAlignment(Qt::AlignCenter);               // 가운데 정렬
     ui->humValue->setText(QString::number(hum) + "%");
     ui->humValue->setAlignment(Qt::AlignCenter);
-    ui->dustValue->setText(QString::number(dust) + "\n㎍/㎥");
     ui->dustValue->setAlignment(Qt::AlignCenter);
-    if(dust >= 0 && dust <= 30)         ui->dustValue->setPalette(blue);
-    else if(dust > 30 && dust <= 80)    ui->dustValue->setPalette(green);
-    else if(dust > 80 && dust <= 150)   ui->dustValue->setPalette(orange);
-    else if(dust > 150)                 ui->dustValue->setPalette(red);
+
+    if(dust >= 0 && dust <= 30)
+    {
+        ui->dustValue->setPalette(blue);
+        ui->dustValue->setText("좋음\n(" + QString::number(dust) + "㎍/㎥)");
+    }
+    else if(dust > 30 && dust <= 80)
+    {
+        ui->dustValue->setPalette(green);
+        ui->dustValue->setText("보통\n(" + QString::number(dust) + "㎍/㎥)");
+    }
+    else if(dust > 80 && dust <= 150)
+    {
+        ui->dustValue->setPalette(orange);
+        ui->dustValue->setText("나쁨\n(" + QString::number(dust) + "㎍/㎥)");
+    }
+    else if(dust > 150)
+    {
+        ui->dustValue->setPalette(red);
+        ui->dustValue->setText("매우나쁨\n(" + QString::number(dust) + "㎍/㎥)");
+    }
     // 미세먼지 범위에 따라 색 변경
 } // 센서 데이터 화면에 출력
 Dialog::~Dialog()
@@ -110,8 +126,9 @@ void Dialog::showTime()
     QString dateText;
     QString timeText;
 
-    dateText = date.toString("yyyy-MM-dd");	// 2019-11-15 형식으로 출력
-    timeText = time.toString("AP hh : mm : ss");
+    dateText = date.toString("yy년 MM월 dd일");	// 19년 12월 02일 형식으로 출력
+    if(time.second()%2==0)      timeText = time.toString("AP hh : mm : ss   ");
+    else                        timeText = time.toString("AP hh   mm   ss   ");
 
     ui->dateValue->setText(dateText);
     ui->timeValue->setText(timeText);
@@ -149,7 +166,7 @@ void Dialog::newConnection()
     {
         client->close();
         con--;
-    } // 접속되어 있던 소켓 연결 해
+    } // 접속되어 있던 소켓 연결 해제
     client = tcpServer->nextPendingConnection();
     con++;
     connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
