@@ -64,7 +64,7 @@ public:
         dateValue = new QLabel(Dialog);
         dateValue->setObjectName(QStringLiteral("dateValue"));
         QFont font;
-        font.setPointSize(72);
+        font.setPointSize(66);
         font.setBold(true);
         font.setWeight(75);
         dateValue->setFont(font);
@@ -87,6 +87,7 @@ public:
         horizontalLayout->setObjectName(QStringLiteral("horizontalLayout"));
         tempIcon = new QLabel(Dialog);
         tempIcon->setObjectName(QStringLiteral("tempIcon"));
+        tempIcon->setStyleSheet(QStringLiteral(""));
 
         horizontalLayout->addWidget(tempIcon);
 
@@ -113,6 +114,7 @@ public:
         horizontalLayout_2->setObjectName(QStringLiteral("horizontalLayout_2"));
         tempValue = new QLabel(Dialog);
         tempValue->setObjectName(QStringLiteral("tempValue"));
+        tempValue->setStyleSheet(QStringLiteral(""));
 
         horizontalLayout_2->addWidget(tempValue);
 
