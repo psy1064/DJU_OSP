@@ -39,18 +39,18 @@
 
 ## 안드로이드 어플리케이션 실행화면
 
-![SplashActivity.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/SplashActivity.png?raw=true)
+![SplashActivity.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/SplashActivity.png?raw=true){: width="20%" height="20%"}
 
 - [lodingActivity.java](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/loadingActivity.java)
   - Splash Activity로 2초 뒤 MainActivity로 이동
 
-![MainActivity1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity1.png?raw=true)
+![MainActivity1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity1.png?raw=true){: width="20%" height="20%"}
 
-![MainActivity2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity2.png?raw=true)
+![MainActivity2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity2.png?raw=true){: width="20%" height="20%"}
 
-![MainActivity3.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity3.png?raw=true)
+![MainActivity3.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity3.png?raw=true){: width="20%" height="20%"}
 
-![MainActivity4.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity4.png?raw=true)
+![MainActivity4.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity4.png?raw=true){: width="20%" height="20%"}
 
 - [MainActivity](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/MainActivity.java)
   - 어플리케이션의 메인화면
