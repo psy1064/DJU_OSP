@@ -9,18 +9,19 @@
 
 ## 작품 기능
 
-- 라즈베리파이를 이용해 스마트홈 구축
-  - 실시간으로 일정주기(10초)마다 실내 환경 정보(온도, 습도, 미세먼지) 데이터 수집 및 어플리케이션에 전송
-  - 인체감지센서를 통해 사람이 인식되는것을 감지 후 어플리케이션에 전송
-  - Qt Programming과 터치식 LCD를 이용해 GUI 환경 구축
-  - 적외선 Pi camera를 이용해 CCTV 영상 촬영
-  - 서보모터로 전등 스위치 ON / OFF
+- 라즈베리파이를 이용한 스마트 홈 구축
+  - 실시간 환경 정보(온도, 습도, 미세먼지) 데이터 수집
+  - Qt Programming과 LCD를 이용해 GUI 형태로 출력
+  - Pi camera로 CCTV 영상 촬영 및 적외선 촬영 가능
+  - 서보모터로 전등 스위치 ON/OFF
+  - 인체감지센서를 통해 사람 인식
 - 안드로이드 어플리케이션으로 실시간 모니터링 및 제어
-  - 라즈베리파이에서 수집, 전송한 데이터를 실시간 모니터링
+  - 라즈베리파이에서 수집한 데이터를 실시간 모니터링
   - Pi camera로 촬영한 영상을 실시간 스트리밍
-  - 원격으로 전등 스위치에 부착된 서보모터를 조작해 ON / OFF 가능
-  - 알람을 설정하여 원하는 시간에 전등스위치를 켜주고 알람소리 재생
-  - 어플 내 감시모드 활성화 시 인체감지센서에 사람이 감지되었을 때 Push 알람
+  - CCTV 원격 ON / OFF
+  - 원격으로 전등 스위치 ON / OFF 
+  - 알람 기능을 활용하여 원하는 시간에 전등 스위치 ON
+  - 어플 내 감시모드 활성화 시 사람이 감지되었을 때 Push 알람
 
 ## 작품 구조도
 
@@ -30,8 +31,29 @@
 
 
 
-## 실행화면
+## 라즈베리파이 실행화면
 
-![execute1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/execute1.png?raw=true)
+![RaspberryPi_Execute1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/RaspberryPi_Execute1.png?raw=true) 
 
-![execute2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/execute2.png?raw=true)
+![RaspberryPi_Execute2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/RaspberryPi_Execute2.png?raw=true)
+
+## 안드로이드 어플리케이션 실행화면
+
+![SplashActivity.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/SplashActivity.png?raw=true)
+
+- [lodingActivity.java](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/loadingActivity.java)
+  - Splash Activity로 2초 뒤 MainActivity로 이동
+
+![MainActivity1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity1.png?raw=true)
+
+![MainActivity2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity2.png?raw=true)
+
+![MainActivity3.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity3.png?raw=true)
+
+![MainActivity4.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity4.png?raw=true)
+
+- [MainActivity](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/MainActivity.java)
+  - 어플리케이션의 메인화면
+  - 어플 상단에는 라즈베리파이로부터 받아온 환경정보(미세먼지, 습도, 온도) 데이터 출력
+  - 어플 하단에는 4가지 부가기능(전등제어, CCTV 확인, 알람, 감시모드 활성화) 버튼이 있음
+  - 미세먼지 값은 등급에 따라 색과 등급을 표시해줌
