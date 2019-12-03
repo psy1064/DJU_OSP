@@ -23,6 +23,7 @@ public class tcpThread extends Thread{
     @Override
     public void run() {
         try {
+            Log.d(TAG, "접속");
             socket = new Socket(ip, port);
             dataOutputStream = socket.getOutputStream();
             dataInputStream = socket.getInputStream();
@@ -40,6 +41,11 @@ public class tcpThread extends Thread{
                 Log.d(TAG, "byte = " + bytes);
                 if(bytes > 0) {
                     tmp = new String(buffer, 0, bytes);
+                } else {
+                    Log.d(TAG, "재접속");
+                    socket = new Socket(ip, port);
+                    dataOutputStream = socket.getOutputStream();
+                    dataInputStream = socket.getInputStream();
                 }
                 Log.d(TAG,tmp);
                 handler.obtainMessage(0,tmp).sendToTarget();
@@ -51,18 +57,18 @@ public class tcpThread extends Thread{
     public void turnOn() throws IOException {
         byte[] inst = "On".getBytes();
         dataOutputStream.write(inst);
-    }
+    } // 전등 On 명령
     public void turnOff() throws IOException {
         byte[] inst = "Off".getBytes();
         dataOutputStream.write(inst);
-    }
+    } // 전등 Off 명령
     public void cctvOn() throws IOException {
         byte[] inst = "cctvOn".getBytes();
         dataOutputStream.write(inst);
-    }
+    } // CCTV On 명령
     public void cctvOff() throws IOException {
         byte[] inst = "cctvOff".getBytes();
         dataOutputStream.write(inst);
-    }
-}
+    } // CCTV Off 명령
+} // Tcp 소켓통신을 담당하는 클래스
 
