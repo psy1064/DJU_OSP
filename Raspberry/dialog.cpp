@@ -10,7 +10,7 @@
 #include <softPwm.h>
 #include <iostream>
 
-#define SERVO 2
+#define SERVO 1
 
 Dialog::Dialog(QWidget *parent) :
     QDialog(parent),

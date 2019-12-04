@@ -5,7 +5,7 @@
 #include <wiringPi.h>
 #include <iostream>
 
-#define HUMAN 1			// Human detect sensor wPi Pin 1, BGM 18
+#define HUMAN 2			// Human detect sensor wPi Pin 2
 
 using namespace std;
 unsigned char exit_flag = 0;
