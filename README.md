@@ -4,6 +4,8 @@
 
 # 프로젝트 소개
 
+![applogo.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/applogo.png?raw=true)
+
 - 프로젝트명 : 라즈베리파이를 이용한 스마트홈 및 원격관리 어플리케이션
 - 개발기간 : 19.10.01 ~ 19.12.05
 - 개발인원 : 박세용
