@@ -4,6 +4,8 @@
 
 # 프로젝트 소개
 
+![applogo.png](https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/applogo.png?raw=true)
+
 - 프로젝트명 : 라즈베리파이를 이용한 스마트홈 및 원격관리 어플리케이션
 - 개발기간 : 19.10.01 ~ 19.12.05
 - 개발인원 : 박세용
@@ -86,4 +88,4 @@
   - 알람을 설정하면 이미지 버튼의 색이 바뀌고 Notifcation Bar에 설정한 알람시간을 띄움
   - 알람이 울리면 상단의 시계가 실시간으로 출력되고 아래의 Swipe Button을 밀어서 해제하면 종료됨
 
-  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmActivity.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmOn.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmOnNotification.png?raw=true" width="350">
+  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmOn.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmOnNotification.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmActivity.png?raw=true" width="350">
