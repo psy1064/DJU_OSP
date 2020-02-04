@@ -29,9 +29,9 @@ import java.io.IOException;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
-
     final String TAG = "TAG+MainActivity";
     String[] sensorData = {"0", "0", "0", "0"};
+
     tcpThread tcpThread;
 
     TextView dustText, tempText, humText;
@@ -62,22 +62,19 @@ public class MainActivity extends AppCompatActivity {
         alarmButton = (ImageButton) findViewById(R.id.alarmButton);
         detectModeButton = (ImageButton) findViewById(R.id.detectModeButton);
 
-        if (detectModeActive)   detectModeButton.setBackgroundResource(R.drawable.activeoval);
-        if (alarmActive)        alarmButton.setBackgroundResource(R.drawable.activeoval);
-
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "default");
         Intent intent = new Intent(getApplicationContext(), notificationBroadcast.class);
         dataPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
         builder.setSmallIcon(R.drawable.applogo);
         builder.setContentTitle("실내 환경 데이터");
         builder.setContentIntent(dataPendingIntent);
         builder.setContentText("온도 = 0 습도 = 0 미세먼지 = ");
         dataNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            dataNotification.createNotificationChannel(new NotificationChannel("default", "채널", NotificationManager.IMPORTANCE_LOW));
+            dataNotification.createNotificationChannel(new NotificationChannel("default", "SensorData", NotificationManager.IMPORTANCE_LOW));
         }
         dataNotification.notify(0, builder.build());
+        // 센서 데이터 Notification 설정
 
         Handler handler = new Handler(new Handler.Callback() {
             @Override
@@ -103,21 +100,21 @@ public class MainActivity extends AppCompatActivity {
                     dustText.setTextColor(Color.RED);
                     dustText.setText("매우나쁨 \n(" + sensorData[2] + " ㎍/㎥)");
                     builder.setContentText("온도 = " + sensorData[0] + " ℃ 습도 = " + sensorData[1] + " % 미세먼지 농도 = 매우나쁨 (" + sensorData[2] + "㎍/㎥)");
-                }
+                } // 미세먼지 등급에 따라 등급과 글자색 변경
                 if (sensorData[3].equals("1") && detectModeActive == true) {
                     detectModeButton.setBackgroundResource(R.drawable.oval);
                     detectModeActive = false;
                     showDetectNotify();
-                }
-                builder.setWhen(System.currentTimeMillis());
+                } // 감시모드가 활성화 되어 있을 때 sensorData[3] 값이 1이면
+                builder.setWhen(System.currentTimeMillis()); // Notification의 시간을 실시간으로 설정
                 dataNotification.notify(0, builder.build());
                 return false;
-            }
+            } // tcpThread 클래스로부터 넘어오는 값을 받는 Handler
         });
-
         tcpThread = new tcpThread(handler);
         tcpThread.start();
         // tcp 소켓 통신 수신 쓰레드
+
         lightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,14 +154,16 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
-        });
+        }); // 전등 On/Off 버튼 클릭 리스너
+
         cctvButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), cctvActivity.class);
                 startActivity(intent);
             }
-        });
+        }); // CCTV 확인 버튼 클릭 리스너
+
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -189,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                     alarmActive = false;
                 }
             }
-        });
+        }); // 알람 버튼 클릭 리스너
         detectModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                     detectModeButton.setBackground(ContextCompat.getDrawable(MainActivity.this, R.drawable.oval));
                 }
             }
-        });
+        }); // 감시모드 버튼 클릭 리스너
     }
 
     @Override
@@ -212,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-    }
+    } // 뒤로가기 버튼 클릭했을 때 홈으로 이동하기
 
     public void showDetectNotify() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "1");
@@ -225,10 +224,10 @@ public class MainActivity extends AppCompatActivity {
 
         detectNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            detectNotification.createNotificationChannel(new NotificationChannel("1", "1", NotificationManager.IMPORTANCE_HIGH));
+            detectNotification.createNotificationChannel(new NotificationChannel("1", "감시모드", NotificationManager.IMPORTANCE_HIGH));
         }
         detectNotification.notify(1, builder.build());
-    }
+    } // 감시모드 활성화일때 사람이 감지되면 Notification 생성
 
     public void showAlarmNotify() {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "2");
@@ -250,11 +249,11 @@ public class MainActivity extends AppCompatActivity {
 
         alarmNotification = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            alarmNotification.createNotificationChannel(new NotificationChannel("2", "2", NotificationManager.IMPORTANCE_DEFAULT));
+            alarmNotification.createNotificationChannel(new NotificationChannel("2", "알람", NotificationManager.IMPORTANCE_DEFAULT));
         }
         alarmNotification.notify(2, builder.build());
         Log.d(TAG, "show Alarm notify");
-    }
+    } // 알람 On 시켰을 때 Notification 생성
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setAlarm() {
@@ -263,24 +262,13 @@ public class MainActivity extends AppCompatActivity {
         alarmCalendar.set(Calendar.HOUR_OF_DAY, alarmHour);
         alarmCalendar.set(Calendar.MINUTE, alarmMinute);
         alarmCalendar.set(Calendar.SECOND, 0);
+        // TimePickerDialog 에서 설정한 시간을 알람 시간으로 설정
 
-        if (alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE, 1);
+        if (alarmCalendar.before(Calendar.getInstance())) alarmCalendar.add(Calendar.DATE, 1);  // 알람 시간이 현재시간보다 빠를 때 하루 뒤로 맞춤
         alarmIntent = new Intent(getApplicationContext(), AlarmReceiver.class);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmIntent.setAction(AlarmReceiver.ACTION_RESTART_SERVICE);
         alarmCallPendingIntent = PendingIntent.getBroadcast(MainActivity.this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmCalendar.getTimeInMillis(), alarmCallPendingIntent);
-    }
-
-    @Override
-    protected void onDestroy() {
-        Log.d(TAG, "onDestroy");
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onStop() {
-        Log.d(TAG, "onStop");
-        super.onStop();
-    }
+    } // 알람 설정
 }

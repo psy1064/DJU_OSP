@@ -4,6 +4,8 @@
 
 # 프로젝트 소개
 
+![applogo.png](https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/applogo.png?raw=true)
+
 - 프로젝트명 : 라즈베리파이를 이용한 스마트홈 및 원격관리 어플리케이션
 - 개발기간 : 19.10.01 ~ 19.12.05
 - 개발인원 : 박세용
@@ -26,7 +28,7 @@
 
 ## 작품 구조도
 
-![structure.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/structure.png?raw=true)
+![structure.png](https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/structure.png?raw=true)
 
 
 
@@ -34,16 +36,16 @@
 
 ## 라즈베리파이 실행화면
 
-![RaspberryPi_Execute1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/RaspberryPi_Execute1.png?raw=true) 
+![RaspberryPi_Execute1.png](https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/RaspberryPi_Execute1.png?raw=true) 
 
-![RaspberryPi_Execute2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMFile/RaspberryPi_Execute2.png?raw=true)
+![RaspberryPi_Execute2.png](https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/RaspberryPi_Execute2.png?raw=true)
 
 ## 안드로이드 어플리케이션 실행화면
 
 - [lodingActivity.java](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/loadingActivity.java)
   - Splash Activity로 2초 뒤 MainActivity로 이동
 
-  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/SplashActivity.png?raw=true" width="350">
+  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/SplashActivity.png?raw=true" width="350">
 
 - [MainActivity](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/MainActivity.java)
 
@@ -55,21 +57,21 @@
 
   - 미세먼지 값은 등급에 따라 색과 등급을 표시해줌
 
-    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity1.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity2.png?raw=true" width="350"> <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity3.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/MainActivity4.png?raw=true" width="350">
+    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/MainActivity1.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/MainActivity2.png?raw=true" width="350"> <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/MainActivity3.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/MainActivity4.png?raw=true" width="350">
 
   - 실시간 데이터들은 Notification Bar에 띄워줌
 
-    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/Notification.png?raw=true" width="350">
+    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/Notification.png?raw=true" width="350">
 
   - 전등제어 이미지 버튼 클릭 시 메세지 창이 뜨게 되고 명령에 따라 전등을 ON OFF 시켜줌
 
-    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/LightControl.png?raw=true" width="350">
+    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/LightControl.png?raw=true" width="350">
 
   - 감시모드 이미지 버튼 클릭 시 ''감시모드가 활성화 되었습니다''  ToastMessage 출력 후 버튼의 색 변경
 
   - 감시모드가 활성화 되었을 때 라즈베리파이의 인체감지센서에 사람이 감지되면 Notification Bar에 사람이 감지되었다는 알림이 생성되고 알림 클릭 시 cctvActivity로 바로 이동함
 
-    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/DetectModeOn.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/HumanDetect.png?raw=true" width="350">
+    <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/DetectModeOn.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/HumanDetect.png?raw=true" width="350">
 
 - [cctvActivity](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/cctvActivity.java)
 
@@ -77,7 +79,7 @@
   - CCTV ON / OFF 버튼을 클릭 시 CCTV를 원격으로 ON / OFF 할 수 있음
   - 신고하기 버튼 클릭 시 메세지 창이 뜨게되고 Yes 클릭 시 112로 전화걸수 있는 다이얼로 이동하게 됨
 
-  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/CCTVActivity.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/CCTV_OFF.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/CallMessage.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/Call112.png?raw=true" width="350">
+  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/CCTVActivity.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/CCTV_OFF.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/CallMessage.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/Call112.png?raw=true" width="350">
 
 - [alarmActivity](https://github.com/psy1064/DJU_OSP/blob/master/Android/app/src/main/java/my/homekeeper/AlarmActivity.java)
 
@@ -86,4 +88,4 @@
   - 알람을 설정하면 이미지 버튼의 색이 바뀌고 Notifcation Bar에 설정한 알람시간을 띄움
   - 알람이 울리면 상단의 시계가 실시간으로 출력되고 아래의 Swipe Button을 밀어서 해제하면 종료됨
 
-  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmActivity.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmOn.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMFile/AlarmOnNotification.png?raw=true" width="350">
+  <img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/AlarmOn.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/AlarmOnNotification.png?raw=true" width="350"><img src="https://github.com/psy1064/DJU_OSP/blob/master/READMEFile/AlarmActivity.png?raw=true" width="350">

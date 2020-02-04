@@ -30,9 +30,9 @@ public class AlarmActivity extends AppCompatActivity {
         swipeButton = (SwipeButton) findViewById(R.id.swipe_btn);
         timeText = (TextView) findViewById(R.id.time);
 
-        ((MainActivity)MainActivity.context).alarmButton.setBackgroundResource(R.drawable.oval);
-        ((MainActivity)MainActivity.context).alarmManager.cancel(((MainActivity)MainActivity.context).alarmPendingIntent);
-        ((MainActivity)MainActivity.context).alarmNotification.cancel(2);
+        ((MainActivity)MainActivity.context).alarmButton.setBackgroundResource(R.drawable.oval);    // 알람 버튼의 색을 기본으로 변경
+        ((MainActivity)MainActivity.context).alarmManager.cancel(((MainActivity)MainActivity.context).alarmPendingIntent);  // 알람 취소
+        ((MainActivity)MainActivity.context).alarmNotification.cancel(2);   // Notification 취소
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
                 | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -40,9 +40,10 @@ public class AlarmActivity extends AppCompatActivity {
                 | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         // 잠금 화면 위로 activity 띄워줌
 
-        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.beep);
-        mediaPlayer.setLooping(true);
+        mediaPlayer = MediaPlayer.create(getApplicationContext(),R.raw.beep);   // 소리를 재생할 MediaPlayer
+        mediaPlayer.setLooping(true);   // 무한반복
         mediaPlayer.start();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -52,7 +53,7 @@ public class AlarmActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }).start(); // 전등 On
 
         new Thread(new Runnable() {
             @Override
@@ -73,7 +74,7 @@ public class AlarmActivity extends AppCompatActivity {
                     } catch (InterruptedException ex) {}
                 }
             }
-        }).start();
+        }).start(); // 실시간으로 시계 출력
 
         swipeButton.setOnStateChangeListener(new OnStateChangeListener() {
             @Override
@@ -82,6 +83,6 @@ public class AlarmActivity extends AppCompatActivity {
                 flag=false;
                 finish();
             }
-        });
+        }); // Swipe Button 밀어서 해제
     }
 }

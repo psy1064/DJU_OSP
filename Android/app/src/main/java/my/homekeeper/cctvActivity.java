@@ -47,7 +47,7 @@ public class cctvActivity extends AppCompatActivity {
                         "img{width:100%25;} div{overflow: hidden;} </style></head>" +
                         "<body><div><img src='http://" + ((MainActivity)MainActivity.context).tcpThread.ip + ":8082/'/></div></body></html>",
                 "text/html", "UTF-8");
-
+        // WebView 에 CCTV 화면 띄움
         webView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -80,7 +80,7 @@ public class cctvActivity extends AppCompatActivity {
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
-        });
+        }); // 신고하기 버튼 클릭 시 112 전화걸기로 이동
 
         cctvOnButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +96,7 @@ public class cctvActivity extends AppCompatActivity {
                     }
                 }).start();
             }
-        });
+        }); // On 버튼 클릭 시 cctv On 명령어 전송
         cctvOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,6 +111,6 @@ public class cctvActivity extends AppCompatActivity {
                     }
                 }).start();
             }
-        });
+        }); // Off 버튼 클릭 시 cctv Off 명령어 전송
     }
 }
