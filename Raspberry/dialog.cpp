@@ -62,6 +62,7 @@ Dialog::Dialog(QWidget *parent) :
 }
 void Dialog::showValue(int temp, int hum, int dust)
 {
+    std::cout << "showValue\n";
     ui->tempValue->setText(QString::number(temp) + "°C");       // tempValue 라벨 텍스트 설정
     ui->tempValue->setAlignment(Qt::AlignCenter);               // 가운데 정렬
     ui->humValue->setText(QString::number(hum) + "%");
@@ -104,8 +105,9 @@ void Dialog::on_onButton_clicked()
     softPwmWrite(SERVO, 12);
     delay(100);
     softPwmWrite(SERVO, 15);
-    delay(100);
+    delay(1000);
     pinMode(SERVO, INPUT);	// 서보모터 떨림 현상 방지
+    delay(500);
 } // 화면의 On 버튼을 눌렀을 때 서보모터로 전등  On
 void Dialog::on_offButton_clicked()
 {
@@ -116,8 +118,9 @@ void Dialog::on_offButton_clicked()
     softPwmWrite(SERVO, 18);
     delay(100);
     softPwmWrite(SERVO, 15);
-    delay(100);
+    delay(1000);
     pinMode(SERVO, INPUT);	// 서보모터 떨림 현상 방지
+    delay(500);
 } // 화면의 Off 버튼을 눌렀을 때 서보모터로 전등  Off
 void Dialog::showTime()
 {
