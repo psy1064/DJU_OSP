@@ -15,7 +15,6 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
-#include <QtWidgets/QPushButton>
 #include <QtWidgets/QVBoxLayout>
 
 QT_BEGIN_NAMESPACE
@@ -32,14 +31,10 @@ public:
     QLabel *tempIcon;
     QLabel *humIcon;
     QLabel *dustIcon;
-    QLabel *lightIcon;
     QHBoxLayout *horizontalLayout_2;
     QLabel *tempValue;
     QLabel *humValue;
     QLabel *dustValue;
-    QVBoxLayout *verticalLayout;
-    QPushButton *onButton;
-    QPushButton *offButton;
 
     void setupUi(QDialog *Dialog)
     {
@@ -101,11 +96,6 @@ public:
 
         horizontalLayout->addWidget(dustIcon);
 
-        lightIcon = new QLabel(Dialog);
-        lightIcon->setObjectName(QStringLiteral("lightIcon"));
-
-        horizontalLayout->addWidget(lightIcon);
-
 
         verticalLayout_2->addLayout(horizontalLayout);
 
@@ -129,42 +119,6 @@ public:
 
         horizontalLayout_2->addWidget(dustValue);
 
-        verticalLayout = new QVBoxLayout();
-        verticalLayout->setSpacing(5);
-        verticalLayout->setObjectName(QStringLiteral("verticalLayout"));
-        verticalLayout->setContentsMargins(0, 0, 0, 0);
-        onButton = new QPushButton(Dialog);
-        onButton->setObjectName(QStringLiteral("onButton"));
-        QSizePolicy sizePolicy1(QSizePolicy::Minimum, QSizePolicy::Minimum);
-        sizePolicy1.setHorizontalStretch(0);
-        sizePolicy1.setVerticalStretch(0);
-        sizePolicy1.setHeightForWidth(onButton->sizePolicy().hasHeightForWidth());
-        onButton->setSizePolicy(sizePolicy1);
-        QFont font1;
-        font1.setPointSize(36);
-        font1.setBold(true);
-        font1.setItalic(false);
-        font1.setWeight(75);
-        onButton->setFont(font1);
-        onButton->setStyleSheet(QStringLiteral("background-color: rgb(255, 255, 255);"));
-        onButton->setCheckable(false);
-        onButton->setChecked(false);
-        onButton->setAutoRepeat(false);
-
-        verticalLayout->addWidget(onButton);
-
-        offButton = new QPushButton(Dialog);
-        offButton->setObjectName(QStringLiteral("offButton"));
-        sizePolicy1.setHeightForWidth(offButton->sizePolicy().hasHeightForWidth());
-        offButton->setSizePolicy(sizePolicy1);
-        offButton->setFont(font1);
-        offButton->setStyleSheet(QStringLiteral("background:rgb(255,255,255)"));
-
-        verticalLayout->addWidget(offButton);
-
-
-        horizontalLayout_2->addLayout(verticalLayout);
-
 
         verticalLayout_2->addLayout(horizontalLayout_2);
 
@@ -185,12 +139,9 @@ public:
         tempIcon->setText(QString());
         humIcon->setText(QString());
         dustIcon->setText(QString());
-        lightIcon->setText(QString());
         tempValue->setText(QApplication::translate("Dialog", "<html><head/><body><p align=\"center\">temp</p></body></html>", nullptr));
         humValue->setText(QApplication::translate("Dialog", "<html><head/><body><p align=\"center\">hum</p></body></html>", nullptr));
         dustValue->setText(QApplication::translate("Dialog", "<html><head/><body><p align=\"center\">dust</p></body></html>", nullptr));
-        onButton->setText(QApplication::translate("Dialog", "on", nullptr));
-        offButton->setText(QApplication::translate("Dialog", "off", nullptr));
     } // retranslateUi
 
 };

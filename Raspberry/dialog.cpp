@@ -25,17 +25,14 @@ Dialog::Dialog(QWidget *parent) :
     blue.setColor(QPalette::Active, QPalette::WindowText, Qt::blue);
     green.setColor(QPalette::Active, QPalette::WindowText, Qt::green);      	// Palette에 색 설정
 
-    lightIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/picture/lightbulb.png");
     tempIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/picture/temperature.png");
     humIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/picture/hum.png");
     dustIconPicture.load("/home/pi/Github/DJU_OSP/Raspberry/picture/dust.png");		// Icon에 넣을 사진 경로 지정
 
-    ui->lightIcon->setPixmap(lightIconPicture.scaled(256,256,Qt::KeepAspectRatio));
     ui->tempIcon->setPixmap(tempIconPicture.scaled(256,256,Qt::KeepAspectRatio));
     ui->humIcon->setPixmap(humIconPicture.scaled(256,256,Qt::KeepAspectRatio));
     ui->dustIcon->setPixmap(dustIconPicture.scaled(256,256,Qt::KeepAspectRatio));	// Icon에 사진 넣기
 
-    ui->lightIcon->setAlignment(Qt::AlignCenter);
     ui->tempIcon->setAlignment(Qt::AlignCenter);
     ui->humIcon->setAlignment(Qt::AlignCenter);
     ui->dustIcon->setAlignment(Qt::AlignCenter);				// 사진 가운데 정렬
@@ -59,6 +56,8 @@ Dialog::Dialog(QWidget *parent) :
     connect(timer, SIGNAL(timeout()), this, SLOT(showTime()));	// 설정한 시간마다 showTime() 실행
     showTime();	// 처음 한번 현재 시간 출력
     timer->start(1000);	// 1초 간격으로 timer 동작
+    rad = 18;
+    cctv_center();  // cctv 위치 정중앙으
 }
 void Dialog::showValue(int temp, int hum, int dust)
 {
@@ -101,32 +100,40 @@ Dialog::~Dialog()
     delete ui;
 }
 
-void Dialog::on_onButton_clicked()
+void Dialog::cctv_center()
 {
-    std::cout << "turnon\n";
+    std::cout << "cctv_center\n";
 
     pinMode(SERVO, OUTPUT);
     softPwmCreate(SERVO, 0, 50);
-    softPwmWrite(SERVO, 12);
+    softPwmWrite(SERVO, rad);
     delay(100);
-    softPwmWrite(SERVO, 15);
-    delay(1000);
     pinMode(SERVO, INPUT);	// 서보모터 떨림 현상 방지
     delay(500);
-} // 화면의 On 버튼을 눌렀을 때 서보모터로 전등  On
-void Dialog::on_offButton_clicked()
+} // cctv 위치 정중앙으
+void Dialog::cctv_right()
 {
-    std::cout << "turnoff\n";
+    std::cout << "cctv_right\n";
+
+    rad--;
 
     pinMode(SERVO, OUTPUT);
     softPwmCreate(SERVO, 0, 50);
-    softPwmWrite(SERVO, 18);
+    softPwmWrite(SERVO, rad);
     delay(100);
-    softPwmWrite(SERVO, 15);
-    delay(1000);
     pinMode(SERVO, INPUT);	// 서보모터 떨림 현상 방지
     delay(500);
 } // 화면의 Off 버튼을 눌렀을 때 서보모터로 전등  Off
+void Dialog::cctv_left()
+{
+    rad++;
+    pinMode(SERVO, OUTPUT);
+    softPwmCreate(SERVO, 0, 50);
+    softPwmWrite(SERVO, rad);
+    delay(100);
+    pinMode(SERVO, INPUT);	// 서보모터 떨림 현상 방지
+    delay(500);
+}
 void Dialog::showTime()
 {
     QTime time = QTime::currentTime();	// 현재 시간
@@ -199,8 +206,9 @@ void Dialog::readData()
     if(client->bytesAvailable()>=0)
     {
         QByteArray data = client->readAll();
-        if(data.toStdString() == "On")          on_onButton_clicked();
-        else if(data.toStdString() == "Off")    on_offButton_clicked();
+        if(data.toStdString() == "center")         cctv_center();
+        else if(data.toStdString() == "right")     cctv_right();
+        else if(data.toStdString() == "left")      cctv_left();
         else if(data.toStdString() == "cctvOn")    system("sudo motion");
         else if(data.toStdString() == "cctvOff")   system("sudo killall -15 motion");
     }

@@ -21,14 +21,16 @@ public:
     ~Dialog();
 private slots:
     void showValue(int temp, int hum, int dust);	// 센서 데이터 화면에 출력
-    void on_onButton_clicked(); 			// 화면의 On 버튼을 눌렀을 때 서보모터로 전등 On
-    void on_offButton_clicked();			// 화면의 Off 버튼을 눌렀을 때 서보모터로 전등 Off
     void showTime();					// 화면에 현재 날짜 시간 출력
 
     void newConnection();				// 서버에 소켓이 접속했을 때 실행
     void readData();					// 데이터 수신 함수
     void disConnected();				// 소켓 연결 해제 시 실행
     void sendValue(int temp, int hum, int dust, int human);	// 수집된 센서 데이터 어플리케이션에 송신
+
+    void cctv_center();
+    void cctv_right();
+    void cctv_left();                   // cctv 위치 조정
 private:
     Ui::Dialog *ui;
     QTimer* timer;				// Timer 변수
@@ -41,6 +43,7 @@ private:
 
     int con; // server 접속한 소켓 수
     int temp, hum, dust, human; // 받아온 센서 데이터 저장용
+    int rad;    // 서보모터 각도
 };
 
 #endif // DIALOG_H
