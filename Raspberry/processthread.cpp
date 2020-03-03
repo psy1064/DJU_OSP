@@ -31,7 +31,7 @@ void processThread::run()
             pre_human = human;
             std::cout << "change\n";
             emit setValue(temp, hum, dust, human);
-        }
+        } // 센서 데이터의 변화가 있을때만 시그널을 보내줌
         sleep(5);
     }
 }

@@ -63,6 +63,11 @@ Dialog::Dialog(QWidget *parent) :
 void Dialog::showValue(int temp, int hum, int dust)
 {
     std::cout << "showValue\n";
+
+    this->temp = temp;
+    this->hum = hum;
+    this->dust = dust;  // 받아온 데이터 저장
+
     ui->tempValue->setText(QString::number(temp) + "°C");       // tempValue 라벨 텍스트 설정
     ui->tempValue->setAlignment(Qt::AlignCenter);               // 가운데 정렬
     ui->humValue->setText(QString::number(hum) + "%");
@@ -175,6 +180,8 @@ void Dialog::newConnection()
     connect(pthread, SIGNAL(setValue(int, int, int, int)), this, SLOT(sendValue(int, int, int, int)));    // 수집된 센서 데이터 송신
     connect(client,SIGNAL(readyRead()),this,SLOT(readData()));
     connect(client,SIGNAL(disconnected()),this,SLOT(disConnected()));
+
+    sendValue(temp, hum, dust, 0);
 } // 서버에 소켓이 접속했을 때 실행
 void Dialog::sendValue(int temp, int hum, int dust,int human)
 {

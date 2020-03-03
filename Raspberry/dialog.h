@@ -40,6 +40,7 @@ private:
     QTcpSocket* client;				// Tcp socket
 
     int con; // server 접속한 소켓 수
+    int temp, hum, dust, human; // 받아온 센서 데이터 저장용
 };
 
 #endif // DIALOG_H
