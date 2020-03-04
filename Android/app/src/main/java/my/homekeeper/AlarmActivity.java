@@ -15,18 +15,15 @@ import java.util.Calendar;
 
 public class AlarmActivity extends AppCompatActivity {
     Calendar calendar;
-    RelativeLayout relativeLayout;
     SwipeButton swipeButton;
     TextView timeText;
     MediaPlayer mediaPlayer;
-    Button alarmButton;
     boolean flag = true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
         calendar = Calendar.getInstance();
-        relativeLayout = (RelativeLayout) findViewById(R.id.background);
         swipeButton = (SwipeButton) findViewById(R.id.swipe_btn);
         timeText = (TextView) findViewById(R.id.time);
 

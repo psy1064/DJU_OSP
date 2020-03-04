@@ -54,14 +54,18 @@ public class tcpThread extends Thread{
             }
         }
     }
-    public void turnOn() throws IOException {
-        byte[] inst = "On".getBytes();
+    public void cctv_center() throws IOException {
+        byte[] inst = "center".getBytes();
         dataOutputStream.write(inst);
-    } // 전등 On 명령
-    public void turnOff() throws IOException {
-        byte[] inst = "Off".getBytes();
+    } // cctv 중앙으로 명령
+    public void cctv_right() throws IOException {
+        byte[] inst = "right".getBytes();
         dataOutputStream.write(inst);
-    } // 전등 Off 명령
+    } // cctv 오른쪽으로 명령
+    public void cctv_left() throws IOException {
+        byte[] inst = "left".getBytes();
+        dataOutputStream.write(inst);
+    } // cctv 왼쪽으로 명령
     public void cctvOn() throws IOException {
         byte[] inst = "cctvOn".getBytes();
         dataOutputStream.write(inst);
