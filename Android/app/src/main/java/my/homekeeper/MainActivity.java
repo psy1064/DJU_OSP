@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         dustText = (TextView) findViewById(R.id.dustText);
         tempText = (TextView) findViewById(R.id.tempText);
         humText = (TextView) findViewById(R.id.humText);
-        lightButton = (ImageButton) findViewById(R.id.lightButton);
         cctvButton = (ImageButton) findViewById(R.id.cctvButton);
         alarmButton = (ImageButton) findViewById(R.id.alarmButton);
         detectModeButton = (ImageButton) findViewById(R.id.detectModeButton);
@@ -114,47 +113,6 @@ public class MainActivity extends AppCompatActivity {
         tcpThread = new tcpThread(handler);
         tcpThread.start();
         // tcp 소켓 통신 수신 쓰레드
-
-        lightButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("전등 제어");
-                builder.setMessage("전등을 키시겠습니까? 끄시겠습니까?");
-                builder.setPositiveButton("On", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    tcpThread.turnOn();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }).start();
-                    }
-                });
-                builder.setNegativeButton("Off", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    tcpThread.turnOff();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }).start();
-                    }
-                });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-            }
-        }); // 전등 On/Off 버튼 클릭 리스너
 
         cctvButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -44,17 +44,6 @@ public class AlarmActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    ((MainActivity)MainActivity.context).tcpThread.turnOn();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start(); // 전등 On
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
                 while (flag == true) {
                     try {
                         calendar = Calendar.getInstance();

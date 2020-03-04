@@ -101,40 +101,15 @@
         android:layout_marginTop="29dp" />
 
     <ImageButton
-        android:id="@+id/lightButton"
+        android:id="@+id/alarmButton"
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="73dp"
-        android:layout_marginLeft="73dp"
-        android:layout_marginTop="457dp"
-        android:background="@drawable/oval"
-        android:src="@drawable/tungsten" />
-
-    <TextView
-        android:id="@+id/lightText"
-        android:layout_width="85dp"
-        android:layout_height="20dp"
-        android:layout_below="@+id/lightButton"
-        android:layout_alignEnd="@+id/lightButton"
-        android:layout_alignRight="@+id/lightButton"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_button"
-        android:gravity="center"
-        android:text="전등 On/Off" />
-
-    <ImageButton
-        android:id="@+id/alarmButton"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_below="@+id/lightText"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentLeft="true"
-        android:layout_marginStart="73dp"
-        android:layout_marginLeft="73dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="473dp"
         android:layout_marginBottom="0dp"
         android:background="@drawable/oval"
         android:src="@drawable/alarm" />
@@ -160,11 +135,11 @@
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="457dp"
-        android:layout_marginEnd="73dp"
-        android:layout_marginRight="73dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="473dp"
+        android:layout_toEndOf="@+id/detectModeButton"
+        android:layout_toRightOf="@+id/detectModeButton"
         android:background="@drawable/oval"
         android:src="@drawable/policeman" />
 
@@ -185,12 +160,12 @@
         android:id="@+id/detectModeButton"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_below="@+id/cctvText"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="73dp"
-        android:layout_marginRight="73dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="33dp"
+        android:layout_marginLeft="33dp"
+        android:layout_marginTop="473dp"
+        android:layout_toEndOf="@+id/alarmButton"
+        android:layout_toRightOf="@+id/alarmButton"
         android:background="@drawable/oval"
         android:src="@drawable/binoculars" />
 
